@@ -8,8 +8,10 @@
 #define PI 3.14159265358979323846
 #define MOVE_SPEED 2
 #define FOV (PI / 3)  // 60 degrees field of view (FOV) in radians
-#define NUM_RAYS 60   // Number of rays to cast
-#define PEX 16 
+#define NUM_RAYS 300   // Number of rays to cast
+#define PEX 32 
+#define HEIGHT 1200
+#define WIDTH 1500
 typedef struct s_player
 {
     int x;
@@ -46,7 +48,6 @@ void clear_screen(t_player *p)
 
 void draw_rays(t_player *player, int ray_length)
 {   
-
     for (int i = 0; i < NUM_RAYS; i++)
     {
         // Calculate the angle for each ray
@@ -56,10 +57,97 @@ void draw_rays(t_player *player, int ray_length)
         int ray_x = player->x + (int)(cos(ray_angle) * ray_length);
         int ray_y = player->y + (int)(sin(ray_angle) * ray_length);
 
-        // Draw the ray
-        mlx_put_pixel(player->ray, ray_x, ray_y, 0xFFFFFF);
+        // Bresenham's line algorithm for drawing the ray from the player's position to the end point
+        int dx = abs(ray_x - player->x);
+        int dy = abs(ray_y - player->y);
+        int sx = player->x < ray_x ? 1 : -1;
+        int sy = player->y < ray_y ? 1 : -1;
+        int err = dx - dy;
+
+        int x = player->x;
+        int y = player->y;
+
+        while (x != ray_x || y != ray_y)
+        {
+            mlx_put_pixel(player->ray, x, y, 0xFFFFFF); // Draw pixel along the ray
+
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                x += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                y += sy;
+            }
+
+            // Check if the ray hits a wall and stop if it does
+            if (player->map[y / PEX][x / PEX] == '1')
+            {
+                break;
+            }
+        }
     }
 }
+
+
+// void draw_rays(t_player *player)
+// {
+//     for (int i = 0; i < NUM_RAYS; i++)
+//     {
+//         // Calculate the angle for each ray
+//         float ray_angle = player->angle - (FOV / 2) + (i * FOV / NUM_RAYS);
+
+//         // Ray length initialization
+//         float ray_length = 0;
+//         float max_distance = 1000; // Define a maximum distance to avoid infinite loops
+
+//         // Calculate the direction of the ray
+//         float step_x = cos(ray_angle);
+//         float step_y = sin(ray_angle);
+
+//         // Start point of the ray
+//         float ray_x = player->x;
+//         float ray_y = player->y;
+
+//         while (ray_length < max_distance)
+//         {
+//             // Convert coordinates to map grid
+//             int map_x = (int)(ray_x / PEX);
+//             int map_y = (int)(ray_y / PEX);
+
+//             // Check if the ray is out of bounds or hits a wall
+//             if (map_x < 0 || map_x >= 15 || map_y < 0 || !player->map[map_y] || player->map[map_y][map_x] == '1')
+//             {
+//                 break; // Stop ray if it hits a wall or goes out of bounds
+//             }
+
+//             // Increment ray length
+//             ray_x += step_x;
+//             ray_y += step_y;
+//             ray_length += sqrt(step_x * step_x + step_y * step_y);
+//         }
+
+//         // Draw the ray from the player's position to the point of collision
+//         int screen_x = (int)ray_x;
+//         int screen_y = (int)ray_y;
+//         mlx_put_pixel(player->ray, screen_x, screen_y, 0xFFFFFF);
+//     }
+// }
+
+// void draw_rays(t_player *player)
+// {
+//     int i=0;
+//     while (i<100)
+//     {
+//         mlx_put_pixel(player->ray, player->x+i++, player->y, 0xFFFFFF);
+//     }
+    
+// }
+
+
 void draw_wall(t_player *pl)
 {
     int y =0;
@@ -78,7 +166,7 @@ void draw_wall(t_player *pl)
                    p_x =0;
                    while (p_x <PEX)
                    {
-                        mlx_put_pixel(pl->wall,p_x+(16*x),p_y+(16*y),0xFFFFFFFF);
+                        mlx_put_pixel(pl->wall,p_x+(PEX*x),p_y+(PEX*y),0xFFFFFFFF);
                         p_x++;
                    }
                    p_y++;
@@ -171,17 +259,17 @@ draw_wall(player);
     
 
     // Draw rays across 60 degrees FOV
-    int i =1;
-    while (i<100)
-    {
-        draw_rays(player,i++);
-    }
+
+   
+    draw_rays(player,HEIGHT);
+   
+    // draw_rays(player);
     mlx_put_pixel(player->img, player->x, player->y, 0xFF0000FF);
 }
 
 int main()
 {
-    t_player player = {17, 16*9, 0};
+    t_player player = {PEX*4, PEX*9, 0};
     
     player.map =malloc(15*sizeof(char *));
 
@@ -200,13 +288,12 @@ int main()
     player.map[12] = strdup("111101111110101101111010001");
     player.map[13] = strdup("111111111111111111111111111");
     player.map[14] =NULL;
+    player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
 
-    player.mlx = mlx_init(1500, 1200, "cub3D", true);
-
-    // player.img = mlx_new_image(player.mlx, 1500, 1200);
-    player.black = mlx_new_image(player.mlx, 1500, 1200);
-    player.wall = mlx_new_image(player.mlx, 1500, 1200);
-    // player.ray = mlx_new_image(player.mlx, 1500, 1200);
+    // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    player.wall = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
     mlx_image_to_window(player.mlx, player.black, 0, 0);
     mlx_image_to_window(player.mlx, player.wall, 0, 0);
