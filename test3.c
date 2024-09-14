@@ -1,36 +1,38 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <math.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test3.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
+/*   Updated: 2024/09/14 19:53:53 by zbakkas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
 #include <string.h>
-#include "MLX/include/MLX42/MLX42.h"
 
-#define MOVE_SPEED 10
-#define ROTATE_SPEED 15* (M_PI/180)//0.01745329252 =>> 0.1745329252
-#define FOV 60*(M_PI/180)  // 60 degrees field of view (FOV) in radians
-#define PEX 32 
-#define HEIGHT 1200
-#define WIDTH 1500
-#define NUM_RAYS (WIDTH)   // Number of rays to cast
-typedef struct s_player
-{
-    float x;
-    float y;
-    double angle;
-    float  ro;  // In radians
 
-    float is_up;
-    float is_down;
-    float is_right;
-    float is_left;
+// typedef struct s_player
+// {
+//     float x;
+//     float y;
+//     double angle;
+//     float  ro;  // In radians
 
-    mlx_image_t* img;
-    mlx_image_t *black;
-    mlx_image_t *ray;
-    mlx_image_t *wall;
-    mlx_t *mlx;
-    char **map;
-} t_player;
+//     float is_up;
+//     float is_down;
+//     float is_right;
+//     float is_left;
+
+//     mlx_image_t* img;
+//     mlx_image_t *black;
+//     mlx_image_t *ray;
+//     mlx_image_t *wall;
+//     mlx_t *mlx;
+//     char **map;
+// } t_player;
 
 
 
@@ -127,22 +129,20 @@ void draw_rays2(t_player *player)
     double next_v_y;
     next_v_y =0;
     int i=0;
-        double distance_h;
-        double distance_v ;
-        distance_h=0;
-        distance_v=0;
-        double ray_length;
-        ray_length =0;
-        float ray_angle = (normal_ang(player->angle) -FOV/2 );
+    double distance_h;
+    double distance_v ;
+    distance_h=0;
+    distance_v=0;
+    double ray_length;
+    ray_length =0;
+    
+    float ray_angle = (normal_ang(player->angle) -FOV/2 );
     while (i< NUM_RAYS)
     {
         ray_angle = normal_ang(ray_angle);
         distance_h=99999999999999;
         distance_v =99999999999999;
         int flag =0;
-    
-        // float ray_angle = player->angle - (FOV / 2) + (i * FOV / NUM_RAYS);
-        // float ray_angle = player->angle ;
 
         /////H//////////////
         printf("ray_angle=%f\n",ray_angle);
@@ -164,15 +164,13 @@ void draw_rays2(t_player *player)
         while (next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)
         {
             printf("x=%dy=%d\n",(int)(next_h_x/PEX),(int)(next_h_y/PEX));
-            if((int)(next_h_y/PEX) <= 22 &&((int)(next_h_x/PEX)) < (int)strlen(player->map[(int)(next_h_y/PEX)]) && player->map[(int)(next_h_y/PEX)][(int)(next_h_x/PEX)]=='1')
+            if((int)(next_h_y/PEX) < player->map_height &&((int)(next_h_x/PEX)) < (int)strlen(player->map[(int)(next_h_y/PEX)]) && player->map[(int)(next_h_y/PEX)][(int)(next_h_x/PEX)]=='1')
             {
-                // printf("is wall\n");
                 distance_h = (sqrt(pow(next_h_x - player->x, 2) + pow(next_h_y - player->y, 2)));
                 break;
             }
             else
             {
-
                 next_h_x+=xa;
                 next_h_y+=ya;
             }
@@ -195,13 +193,9 @@ void draw_rays2(t_player *player)
         ya= xa*tan(ray_angle);
         while (next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT)
         {
-            // printf("x=%dy=%d\n",(int)(next_v_x/PEX),(int)(next_v_y/PEX));
-           
-            if((int)(next_v_y/PEX) <= 22 &&((int)(next_v_x/PEX)) < (int)strlen(player->map[(int)(next_v_y/PEX)]) && player->map[(int)(next_v_y/PEX)][(int)(next_v_x/PEX)]=='1')
+            if((int)(next_v_y/PEX) < player->map_height &&((int)(next_v_x/PEX)) < (int)strlen(player->map[(int)(next_v_y/PEX)]) && player->map[(int)(next_v_y/PEX)][(int)(next_v_x/PEX)]=='1')
             {
-                // printf("is wall\n");
                 distance_v =(sqrt(pow(next_v_x - player->x, 2) + pow(next_v_y - player->y, 2)));
-            
                 break;
             }
             else
@@ -210,58 +204,20 @@ void draw_rays2(t_player *player)
                 next_v_x+=xa;
                 next_v_y+=ya;
             }
-            //  printf("2\n");
         }
         printf("draw\n");
         if(distance_v< distance_h)
         {
-                ray_length = distance_v;
-                
-            printf("v\n");
+            ray_length = distance_v;
             flag =1;
-            if(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT)
-            {
-            mlx_put_pixel(player->img,next_v_x,next_v_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x+1,next_v_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x-1,next_v_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x,next_v_y+1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x,next_v_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x+1,next_v_y+1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x-1,next_v_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x+1,next_v_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_v_x-1,next_v_y+1,0xFF0000FF);
-            }
         }
         else
-        {
             ray_length = distance_h;
-            printf("H\n");
-            
-            if( distance_h !=99999999999999 &&next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)
-            {
-            mlx_put_pixel(player->img,next_h_x,next_h_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x+1,next_h_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x-1,next_h_y,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x,next_h_y+1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x,next_h_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x+1,next_h_y+1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x-1,next_h_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x+1,next_h_y-1,0xFF0000FF);
-            mlx_put_pixel(player->img,next_h_x-1,next_h_y+1,0xFF0000FF);
-            }
-        }
 
-        // if(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT)
-        //     mlx_put_pixel(player->img,next_v_x,next_v_y,0xFF0000FF);
-        // if( distance_h !=99999999999999 &&next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)
-        //     mlx_put_pixel(player->img,next_h_x,next_h_y,0xFFFFFF);
-            printf("distance_v====%f\n",distance_v);
-            printf("distance_h====%f\n",distance_h);
-        
-        printf("end-draw\n");
+    
 
         //////////////wall 3D
-        // ray_length = (sqrt(pow(next_h_x - player->x, 2) + pow(next_h_y - player->y, 2)));
+    
         if((next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)||(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT))
         {
             ray_length *= cos(ray_angle - player->angle);
@@ -286,7 +242,7 @@ void draw_rays2(t_player *player)
             }
             while (sq>=0)
             {
-                mlx_put_pixel(player->img,i,sq--,0x0000FFF0);
+                mlx_put_pixel(player->img,i,sq--,0xFFFFFFF);
             }
             
             
@@ -344,16 +300,13 @@ void mini_map(t_player *player)
     double end_y = y+v;
 
     
-   
-    printf("s_t==%fe_y===%f\n",start_y,end_y);
-    // int yy=0;
     while (start_y < end_y)
     {
         double start_x =x-h;
         double end_x = x+h;
         while (start_x < end_x)
         {
-            if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< 23 && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='1')
+            if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< player->map_height && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='1')
             {
                 mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFFFFFFFF);
             }
@@ -409,141 +362,25 @@ void mini_map(t_player *player)
     mlx_put_pixel(player->img,h-1,v-1,0xFF0000FF);
     mlx_put_pixel(player->img,h+1,v-1,0xFF0000FF);
     mlx_put_pixel(player->img,h-1,v+1,0xFF0000FF);
+    int ii =0;
+    while (ii < 10)
+    {
+        double an_x = h+(cos(normal_ang(player->angle)) *ii);
+        double an_y= v+(sin(normal_ang(player->angle))*ii);
+        mlx_put_pixel(player->img,an_x,an_y,0xFF0000FF);
+
+    ii++;
+    }
+    
 
 }
 
-
-void draw_mini_map(t_player *player)
-{
-
-    int x = (player->x/PEX);
-    int y = (player->y/PEX);
-    int h= 4;
-    int v =3;
-    double new_p_x =player->x-((x-h)*PEX);
-    double new_p_y =player->y-((y-h)*PEX);
-    printf("x==%d,y==%d\n",x,y);
-    printf("new_x==%f,new_y==%f\n",(new_p_x)/PEX,(new_p_y)/PEX);
-    // if(y -v < 0)
-    //     y =v;
-    int start_y = y-v;
-    int end_y = y+v+1;
-    // printf("start_y%d,end_y%d\n",start_y,end_y);
-   
-
-  
-    
-
-
-    while (start_y<end_y)
-    {
-        printf("0000\n");
-        // if(x-h<0)
-        //     x =h;
-        int start_x = x-h;
-        int end_x = x+h+1;
-        printf("start_x%d,star_y%d\n",start_x,start_y);
-        // printf()
-        while (start_x<end_x)
-        {
-            if(start_x >=0 && start_y>=0 && start_y< 23 && start_x < (int)strlen(player->map[start_y]) &&player->map[start_y][start_x]=='1')
-            {
-                int p_y=0;
-                int p_x;
-                while (p_y < PEX)
-                {
-                   p_x =0;
-                   while (p_x <PEX)
-                   {
-                        if(p_x !=PEX && p_y !=PEX)
-                            mlx_put_pixel(player->img,(p_x+(PEX*(start_x-(x-h)))),(p_y+(PEX*(start_y-(y-v)))),0xFFFFFFFF);
-                        p_x++;
-                   }
-                   p_y++;
-                }
-                
-            }
-            else
-            {
-                int p_y=0;
-                int p_x;
-                while (p_y < PEX)
-                {
-                   p_x =0;
-                   while (p_x <PEX)
-                   {
-                        if(p_x !=PEX && p_y !=PEX)
-                            mlx_put_pixel(player->img,(p_x+(PEX*(start_x-(x-h)))),(p_y+(PEX*(start_y-(y-v)))),0x000000FF);
-                        p_x++;
-                   }
-                   p_y++;
-                }
-            }
-            start_x++;
-        }
-        start_y++;
-        
-    }
-
-      ///cadre_map/////
-    int max_c_m_x =(h*2+1)*PEX;
-    int max_c_m_y =(v*2+1)*PEX;
-    int c_m_x=0;
-    int c_m_y =0;
-    while (c_m_x < max_c_m_x)
-    {
-        mlx_put_pixel(player->img,c_m_x,0,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x,1,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x++,2,0xFF0000FF);
-
-    }
-    c_m_x =0;
-    while (c_m_x < max_c_m_x)
-    {
-        mlx_put_pixel(player->img,c_m_x,max_c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x,max_c_m_y- 1,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x++,max_c_m_y- 2,0xFF0000FF);
-
-    }
-    while (c_m_y< max_c_m_y)
-    {
-        mlx_put_pixel(player->img,0,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,1,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,2,c_m_y++,0xFF0000FF);
-    }
-    c_m_y =0 ;
-    while (c_m_y< max_c_m_y)
-    {
-        mlx_put_pixel(player->img,max_c_m_x,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,max_c_m_x-1,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,max_c_m_x-2,c_m_y++,0xFF0000FF);
-    }
-    
-    
-
-    //
-    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX),0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX),0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX),0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX)+1,0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX)-1,0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX)+1,0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX)-1,0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX)-1,0xFFFFFFFF);
-    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX)+1,0xFFFFFFFF);
-    //
-    printf("999999999\n");
-
-}
 
 void my_keyhook(mlx_key_data_t keydata, void* param)
 {
     t_player *player = (t_player *)param;
 
-    /////////////////////
-    printf("right=%1.f\n",player->is_right);
-   
-    ////////
+ 
     mlx_delete_image(player->mlx,player->img);
     player->img = mlx_new_image(player->mlx, 1500, 1200);
 
@@ -637,44 +474,24 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
     // mlx_put_pixel(player->img, (player->x), (player->y), 0xFF0000FF);
     player->ro=0;
     //////
-    player->is_down=0;
-  player->is_up=0;
-  player->is_left=0;
-  player->is_right=0;
+
   
 }
 
 
-int main()
+int main(int arc, char **arv)
 {
-    t_player player = {200, 3*32, 0,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL};
-    // x=343,y=372 
-    player.map =malloc(23*sizeof(char *));
+    
+    t_player	player;
 
-    player.map[0] = strdup("111111111111111111111111111111111111");
-    player.map[1] = strdup("101001000000000000000000000000000001");
-    player.map[2] = strdup("110010100000000000000000000000000001");
-    player.map[3] = strdup("10000100000000000100000000000111111111111");
-   player.map[4] = strdup( "100000000000000010100000000000000000000001");
-    player.map[5] = strdup("11110111111111110000000000000000111111111");
-    player.map[6] = strdup("11110111111111111000000000000000000010001");
-   player.map[7] = strdup( "10000000000000000111111111111110000100011");
-   player.map[8] = strdup( "10000000000000000000000000000000000100011");
-   player.map[9] = strdup( "10000000000000000000000000000000000100011");
-   player.map[10] = strdup( "10000000000000000000000000000000000010001");
-   player.map[11] = strdup( "100000000000000000000000000000000011000111");
-    player.map[12] = strdup("100000000000000000000000000000000000001");
-    player.map[13] = strdup("100000000000000000000000000000000000001");
-    player.map[14] = strdup("100000000000000000000000000000000000001");
-    player.map[15] = strdup("100000000000000000000000000000000000001");
-    player.map[16] = strdup("100000000000000000000000000000000000001");
-    player.map[17] = strdup("100000000000000000000000000000000000001");
-    player.map[18] = strdup("100000000000000000000000000000000000001");
-    player.map[19] = strdup("100000000000000000000000000000000000001");
-    player.map[20] = strdup("100000000000000000000000000000000000001");
-    player.map[21] = strdup("100000000000000000000000000000000000001");
-    player.map[22] = strdup("11111111111111111111111111111111111111");
-    player.map[23] =NULL;
+	if (arc == 2)
+		init_all_data(arv, &player);
+	else
+    {
+		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
+        exit(0);
+    }
+   
     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
 
     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
