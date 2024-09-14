@@ -5,7 +5,7 @@
 #include <string.h>
 #include "MLX/include/MLX42/MLX42.h"
 
-#define MOVE_SPEED 7
+#define MOVE_SPEED 10
 #define ROTATE_SPEED 15* (M_PI/180)//0.01745329252 =>> 0.1745329252
 #define FOV 60*(M_PI/180)  // 60 degrees field of view (FOV) in radians
 #define PEX 32 
@@ -149,7 +149,7 @@ void draw_rays2(t_player *player)
         if(ray_angle > 0 && ray_angle < M_PI)//down
             first_y =(floor(player->y/PEX)*PEX)+PEX;
         else    
-            first_y =(floor(player->y/PEX) *PEX)-0.0001;
+            first_y =(floor(player->y/PEX) *PEX)-0.00001;
 
         first_x = player->x+((first_y-player->y)/tan(ray_angle));
 
@@ -284,7 +284,7 @@ void draw_rays2(t_player *player)
             {
                 mlx_put_pixel(player->img,i,wall_b++,0x00FF00FF);
             }
-            while (sq>0)
+            while (sq>=0)
             {
                 mlx_put_pixel(player->img,i,sq--,0x0000FFF0);
             }
@@ -319,7 +319,7 @@ void draw_wall(t_player *pl)
                    while (p_x <PEX)
                    {
                         if(p_x !=PEX-1 && p_y !=PEX-1)
-                            mlx_put_pixel(pl->wall,p_x+(PEX*x),p_y+(PEX*y),0xFFFFFFFF);
+                            mlx_put_pixel(pl->wall,p_x+(PEX*x),p_y+(PEX*y),0xFFFFFFF);
                         p_x++;
                    }
                    p_y++;
@@ -331,6 +331,209 @@ void draw_wall(t_player *pl)
         y++;
     }
     
+}
+
+void mini_map(t_player *player)
+{
+    
+    double x =player->x/2;
+    double y=player->y/2;
+    int h = 8 * (PEX/2);
+    int v = 6 * (PEX/2);
+    double start_y= y-v;
+    double end_y = y+v;
+
+    
+   
+    printf("s_t==%fe_y===%f\n",start_y,end_y);
+    // int yy=0;
+    while (start_y < end_y)
+    {
+        double start_x =x-h;
+        double end_x = x+h;
+        while (start_x < end_x)
+        {
+            if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< 23 && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='1')
+            {
+                mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFFFFFFFF);
+            }
+            else
+                mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0x000000FF);
+
+            start_x++;
+        }
+        
+        start_y++;
+    }
+    
+ ///cadre_map/////
+    int max_c_m_x =(h*2);
+    int max_c_m_y =(v*2);
+    int c_m_x=0;
+    int c_m_y =0;
+    while (c_m_x < max_c_m_x)
+    {
+        mlx_put_pixel(player->img,c_m_x,0,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x,1,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x++,2,0xFF0000FF);
+
+    }
+    c_m_x =0;
+    while (c_m_x < max_c_m_x)
+    {
+        mlx_put_pixel(player->img,c_m_x,max_c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x,max_c_m_y- 1,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x++,max_c_m_y- 2,0xFF0000FF);
+
+    }
+    while (c_m_y< max_c_m_y)
+    {
+        mlx_put_pixel(player->img,0,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,1,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,2,c_m_y++,0xFF0000FF);
+    }
+    c_m_y =0 ;
+    while (c_m_y< max_c_m_y)
+    {
+        mlx_put_pixel(player->img,max_c_m_x,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,max_c_m_x-1,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,max_c_m_x-2,c_m_y++,0xFF0000FF);
+    }
+    ///////
+    mlx_put_pixel(player->img,h,v,0xFF0000FF);
+    mlx_put_pixel(player->img,h+1,v,0xFF0000FF);
+    mlx_put_pixel(player->img,h-1,v,0xFF0000FF);
+    mlx_put_pixel(player->img,h,v+1,0xFF0000FF);
+    mlx_put_pixel(player->img,h,v-1,0xFF0000FF);
+    mlx_put_pixel(player->img,h+1,v+1,0xFF0000FF);
+    mlx_put_pixel(player->img,h-1,v-1,0xFF0000FF);
+    mlx_put_pixel(player->img,h+1,v-1,0xFF0000FF);
+    mlx_put_pixel(player->img,h-1,v+1,0xFF0000FF);
+
+}
+
+
+void draw_mini_map(t_player *player)
+{
+
+    int x = (player->x/PEX);
+    int y = (player->y/PEX);
+    int h= 4;
+    int v =3;
+    double new_p_x =player->x-((x-h)*PEX);
+    double new_p_y =player->y-((y-h)*PEX);
+    printf("x==%d,y==%d\n",x,y);
+    printf("new_x==%f,new_y==%f\n",(new_p_x)/PEX,(new_p_y)/PEX);
+    // if(y -v < 0)
+    //     y =v;
+    int start_y = y-v;
+    int end_y = y+v+1;
+    // printf("start_y%d,end_y%d\n",start_y,end_y);
+   
+
+  
+    
+
+
+    while (start_y<end_y)
+    {
+        printf("0000\n");
+        // if(x-h<0)
+        //     x =h;
+        int start_x = x-h;
+        int end_x = x+h+1;
+        printf("start_x%d,star_y%d\n",start_x,start_y);
+        // printf()
+        while (start_x<end_x)
+        {
+            if(start_x >=0 && start_y>=0 && start_y< 23 && start_x < (int)strlen(player->map[start_y]) &&player->map[start_y][start_x]=='1')
+            {
+                int p_y=0;
+                int p_x;
+                while (p_y < PEX)
+                {
+                   p_x =0;
+                   while (p_x <PEX)
+                   {
+                        if(p_x !=PEX && p_y !=PEX)
+                            mlx_put_pixel(player->img,(p_x+(PEX*(start_x-(x-h)))),(p_y+(PEX*(start_y-(y-v)))),0xFFFFFFFF);
+                        p_x++;
+                   }
+                   p_y++;
+                }
+                
+            }
+            else
+            {
+                int p_y=0;
+                int p_x;
+                while (p_y < PEX)
+                {
+                   p_x =0;
+                   while (p_x <PEX)
+                   {
+                        if(p_x !=PEX && p_y !=PEX)
+                            mlx_put_pixel(player->img,(p_x+(PEX*(start_x-(x-h)))),(p_y+(PEX*(start_y-(y-v)))),0x000000FF);
+                        p_x++;
+                   }
+                   p_y++;
+                }
+            }
+            start_x++;
+        }
+        start_y++;
+        
+    }
+
+      ///cadre_map/////
+    int max_c_m_x =(h*2+1)*PEX;
+    int max_c_m_y =(v*2+1)*PEX;
+    int c_m_x=0;
+    int c_m_y =0;
+    while (c_m_x < max_c_m_x)
+    {
+        mlx_put_pixel(player->img,c_m_x,0,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x,1,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x++,2,0xFF0000FF);
+
+    }
+    c_m_x =0;
+    while (c_m_x < max_c_m_x)
+    {
+        mlx_put_pixel(player->img,c_m_x,max_c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x,max_c_m_y- 1,0xFF0000FF);
+        mlx_put_pixel(player->img,c_m_x++,max_c_m_y- 2,0xFF0000FF);
+
+    }
+    while (c_m_y< max_c_m_y)
+    {
+        mlx_put_pixel(player->img,0,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,1,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,2,c_m_y++,0xFF0000FF);
+    }
+    c_m_y =0 ;
+    while (c_m_y< max_c_m_y)
+    {
+        mlx_put_pixel(player->img,max_c_m_x,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,max_c_m_x-1,c_m_y,0xFF0000FF);
+        mlx_put_pixel(player->img,max_c_m_x-2,c_m_y++,0xFF0000FF);
+    }
+    
+    
+
+    //
+    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX),0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX),0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX),0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX)+1,0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x,(new_p_y-PEX)-1,0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX)+1,0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX)-1,0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x+1,(new_p_y-PEX)-1,0xFFFFFFFF);
+    mlx_put_pixel(player->img,new_p_x-1,(new_p_y-PEX)+1,0xFFFFFFFF);
+    //
+    printf("999999999\n");
+
 }
 
 void my_keyhook(mlx_key_data_t keydata, void* param)
@@ -420,8 +623,18 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
     // draw_wall(player);
     // draw_rays(player);
     draw_rays2(player);
-   
-    mlx_put_pixel(player->img, (player->x), (player->y), 0xFF0000FF);
+    // draw_mini_map(player);
+   mini_map(player);
+    // mlx_put_pixel(player->img,(player->x),player->y,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)+1,player->y,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)-1,player->y,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x),player->y+1,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x),player->y-1,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)+1,player->y+1,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)-1,player->y-1,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)+1,player->y-1,0xFF0000FF);
+    // mlx_put_pixel(player->img,(player->x)-1,player->y+1,0xFF0000FF);
+    // mlx_put_pixel(player->img, (player->x), (player->y), 0xFF0000FF);
     player->ro=0;
     //////
     player->is_down=0;
