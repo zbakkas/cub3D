@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/15 19:46:54 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/15 20:38:04 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,11 +237,12 @@ void draw_rays2(t_player *player)
                     mlx_put_pixel(player->img,i,wall_t++,0xFF0000FF);
                 else    
                     mlx_put_pixel(player->img,i,wall_t++,0xFFFFFFFF);
-            while (wall_b < WIDTH)
+            while (wall_b >0 && wall_b < WIDTH)
             {
+                
                 mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
             }
-            while (sq>=0)
+            while ( sq>=0)
             {
                 mlx_put_pixel(player->img,i,sq--, player->color_sky);
             }
@@ -455,12 +456,12 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
     player->angle += player->ro * ROTATE_SPEED;
     }
 ////
-if (keydata.key == MLX_KEY_UP && keydata.action)  
+if (keydata.key == MLX_KEY_UP && keydata.action && player->yy <= HEIGHT)  
     {
         player->yy += 15;
     
     }
-    if (keydata.key == MLX_KEY_DOWN && keydata.action)  
+    if (keydata.key == MLX_KEY_DOWN && keydata.action && player->yy >= -HEIGHT)  
     {
         player->yy -= 15;
     }
@@ -505,21 +506,21 @@ void f_mouse( void *param)
     int yy=0;
     player->ro=0;
     mlx_get_mouse_pos(player->mlx,&xx,&yy);
-    if(xx+11< WIDTH/2)
+    if(xx+15< WIDTH/2)
     {
         player->ro= -MOUSE_SENSITIVE;
         printf("left\n");
     }
-    else if( xx-11> WIDTH/2)
+    else if( xx-15> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
         printf("rigth\n");
     }
-     if(yy<HEIGHT/2)
+     if(yy<HEIGHT/2 && player->yy <= HEIGHT)
     {
         player->yy+=15;
     }
-    else if(yy>HEIGHT/2)
+    else if(yy>HEIGHT/2 && player->yy >= -HEIGHT)
     {
         player->yy-=15;
     }
