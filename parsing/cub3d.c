@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/14 19:35:06 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/15 13:16:39 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ void	assign_player(t_player *player, char **map, t_inf inf)
 	player->map = map;
 	player->map_height = count_arrays(map);
 	player->map_weidth = ft_strlen(map[0]); 
+	player->yy =0;
 	if (inf.position == 'N')
-		player->angle = (PI / 2.0);
+		player->angle = (M_PI / 2.0);
 	else if (inf.position == 'S')
-		player->angle = (-PI / 2.0);
+		player->angle = (-M_PI / 2.0);
 	else if (inf.position == 'E')
-		player->angle = (PI);
+		player->angle = (M_PI);
 	else if (inf.position == 'W')
 		player->angle = (0);
 }
@@ -66,7 +67,7 @@ void init_all_data(char **av, t_player *player)
 	parsing_information(&inf);
 	if (!check_errors(&inf) || !valid_ch(map, &inf) || !check_map_err(map))
 		return (free_inf(&inf), free_map(&map), exit(EXIT_FAILURE));
-	// print_information(inf);
+	print_information(inf);
 	check_map_err(map);
 	map_2d = built2darray(map);
 	assign_player(player, map_2d, inf);

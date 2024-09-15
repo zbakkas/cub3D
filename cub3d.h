@@ -7,7 +7,7 @@
 #include <stdlib.h>
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-# include "MLX/include//MLX42/MLX42.h"
+# include "MLX/include/MLX42/MLX42.h"
 
 #define PI 3.14
 #define V_CH " 10NSEW"
@@ -100,6 +100,7 @@ typedef struct s_player
 	mlx_image_t *ray;
 	mlx_image_t *wall;
 	mlx_t *mlx;
+	int yy;
 } t_player;
 
 #define MOVE_SPEED 10
@@ -109,6 +110,7 @@ typedef struct s_player
 #define HEIGHT 1200
 #define WIDTH 1500
 #define NUM_RAYS (WIDTH)
+#define MOUSE_SENSITIVE 0.3
 
 void draw_rays2(t_player *player);
 void init_all_data(char **av, t_player *player);
