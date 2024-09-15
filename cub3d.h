@@ -101,6 +101,10 @@ typedef struct s_player
 	mlx_image_t *wall;
 	mlx_t *mlx;
 	int yy;
+	bool space;
+	int time_space;
+	bool player_up;
+	bool player_down;
 } t_player;
 
 #define MOVE_SPEED 10
@@ -110,7 +114,7 @@ typedef struct s_player
 #define HEIGHT 1200
 #define WIDTH 1500
 #define NUM_RAYS (WIDTH)
-#define MOUSE_SENSITIVE 0.3
+#define MOUSE_SENSITIVE 0.5
 
 void draw_rays2(t_player *player);
 void init_all_data(char **av, t_player *player);

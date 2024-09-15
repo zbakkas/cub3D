@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/15 13:25:58 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/15 19:46:54 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void draw_rays(t_player *player)
 
 void draw_rays2(t_player *player)
 {
+    // printf("yy_in_rays==%d\n",player->yy);
     double first_y=0;
     double first_x=0;
     double xa=0;
@@ -456,12 +457,17 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
 ////
 if (keydata.key == MLX_KEY_UP && keydata.action)  
     {
-        player->yy += 10;
+        player->yy += 15;
     
     }
     if (keydata.key == MLX_KEY_DOWN && keydata.action)  
     {
-        player->yy -= 10;
+        player->yy -= 15;
+    }
+    if(keydata.key== MLX_KEY_SPACE && keydata.action)
+    {
+       player->space =true;
+        
     }
     
     if (keydata.key == MLX_KEY_ESCAPE)
@@ -499,12 +505,12 @@ void f_mouse( void *param)
     int yy=0;
     player->ro=0;
     mlx_get_mouse_pos(player->mlx,&xx,&yy);
-    if(xx< WIDTH/2)
+    if(xx+11< WIDTH/2)
     {
         player->ro= -MOUSE_SENSITIVE;
         printf("left\n");
     }
-    else if( xx> WIDTH/2)
+    else if( xx-11> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
         printf("rigth\n");
@@ -541,10 +547,35 @@ void game_loop(void *param)
 
    
     ////////
-    draw_rays2(player);
+    mlx_key_hook(player->mlx, my_keyhook, player);
+    if(player->space && player->time_space>=0  && !player->player_up)
+    {
+       
+        player->yy+=15;
+        player->time_space--;
+    }
+    if(player->space && player->time_space>=0  && player->player_up)
+    {
+       
+        player->yy-=15;
+        player->time_space--;
+    }
+    
+    if(player->time_space < 0 && !player->player_up)
+    {
+        player->player_up =true;
+        player->time_space =12;
+    }
+    if(player->time_space < 0&& player->player_up && player->space)
+    {
+        player->player_up =false;
+        player->space =false;
+        player->time_space =12;
+    }
+   printf("%d\n",player->yy);
+        draw_rays2(player);
     clear_screen(player);
    mini_map(player);
-    mlx_key_hook(player->mlx, my_keyhook, player);
     f_mouse(player);
    
     
