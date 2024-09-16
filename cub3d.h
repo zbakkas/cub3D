@@ -105,6 +105,10 @@ typedef struct s_player
 	int time_space;
 	bool player_up;
 	bool player_down;
+		mlx_texture_t *n_texter;
+	mlx_texture_t *s_texter;
+	mlx_texture_t *e_texter;
+	mlx_texture_t *w_texter;
 } t_player;
 
 #define MOVE_SPEED 10

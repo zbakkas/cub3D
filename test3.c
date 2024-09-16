@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/16 19:34:55 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/16 20:30:12 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     double wall_light;
     double wall_b;
     double wall_t;
-    double sq = wall_t ;
+    double sq ;
     
     ray_length *= cos(ray_angle - player->angle);
     wall_light =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
@@ -460,6 +460,11 @@ int main(int arc, char **arv)
 {
     
     t_player	player;
+    	player.yy =0;
+	player.space =false;
+	player.time_space = 12;
+	player.player_down =true;
+	player.player_up =false;
 
 	if (arc == 2)
 		init_all_data(arv, &player);
