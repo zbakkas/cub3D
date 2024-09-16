@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/15 19:17:40 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/16 11:25:40 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	assign_player(t_player *player, char **map, t_inf inf)
 	player->time_space = 12;
 	player->player_down =true;
 	player->player_up =false;
-	if (inf.position == 'N')
+	if (inf.position == 'S')
 		player->angle = (M_PI / 2.0);
-	else if (inf.position == 'S')
+	else if (inf.position == 'N')
 		player->angle = (-M_PI / 2.0);
 	else if (inf.position == 'E')
 		player->angle = (M_PI);

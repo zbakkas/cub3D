@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/15 20:38:04 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/16 11:52:30 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,13 +397,13 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
  
         float ray_x = player->x + x;
         float ray_y = player->y + y;
-        if(player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] !='1' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='1')
+        printf("next_x==%fnext_y==%f\n",ray_x,ray_y);
+        printf("_x==%f_y==%f\n",player->x,player->y);
+        if(player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] !='1' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='1' && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='1')
         {
-   
             player->x = ray_x;
             player->y = ray_y;
         }
-  
     }
     if (keydata.key == MLX_KEY_S&& keydata.action)  // Move backward
     {
@@ -505,28 +505,31 @@ void f_mouse( void *param)
    int xx=0;
     int yy=0;
     player->ro=0;
+    // mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
     mlx_get_mouse_pos(player->mlx,&xx,&yy);
     if(xx+15< WIDTH/2)
     {
         player->ro= -MOUSE_SENSITIVE;
-        printf("left\n");
+        player->angle += player->ro * ROTATE_SPEED;
+        // printf("left\n");
     }
     else if( xx-15> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
-        printf("rigth\n");
+        player->angle += player->ro * ROTATE_SPEED;
+        // printf("rigth\n");
     }
-     if(yy<HEIGHT/2 && player->yy <= HEIGHT)
+     if(yy+15<HEIGHT/2 && player->yy <= HEIGHT)
     {
         player->yy+=15;
     }
-    else if(yy>HEIGHT/2 && player->yy >= -HEIGHT)
+    else if(yy-15>HEIGHT/2 && player->yy >= -HEIGHT)
     {
         player->yy-=15;
     }
     
     mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
-    player->angle += player->ro * ROTATE_SPEED;
+    
     // printf("Mouse clicked: Button %d at (%d, %d)\n", button, x, y);
 }
 
@@ -573,12 +576,11 @@ void game_loop(void *param)
         player->space =false;
         player->time_space =12;
     }
-   printf("%d\n",player->yy);
+//    printf("%d\n",player->yy);
         draw_rays2(player);
     clear_screen(player);
    mini_map(player);
     f_mouse(player);
-   
     
 }
 
@@ -594,8 +596,8 @@ int main(int arc, char **arv)
 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
         exit(0);
     }
-   
     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
+   mlx_set_mouse_pos(player.mlx,WIDTH/2,HEIGHT/2);
 
     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
     player.wall = mlx_new_image(player.mlx, WIDTH, HEIGHT);
