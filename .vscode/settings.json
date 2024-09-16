@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "unistd.h": "c",
-        "mlx42.h": "c"
+        "mlx42.h": "c",
+        "__locale": "c"
     }
 }
