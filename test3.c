@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/16 20:30:12 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/17 12:44:01 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,38 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         wall_b =HEIGHT;
     if(wall_t<0)
         wall_t=0;
-    sq = wall_t ;
+    sq = wall_t;
+
+    player->wall_t = wall_t;
+    player->wall_b = wall_b;
     while (wall_t< wall_b)
-        if(flag)
-            mlx_put_pixel(player->img,i,wall_t++,0xFF0000FF);
+    {
+        if(flag) //vertical
+        {
+            if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
+            {
+                // load_colors(player, player->w_texter, t_fpoint(i, wall_t));
+                mlx_put_pixel(player->img,i,wall_t,0x80FF40);
+            }
+            if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
+                || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
+                mlx_put_pixel(player->img,i,wall_t,0xFFFF20);
+        }
         else    
-            mlx_put_pixel(player->img,i,wall_t++,0xFFFFFFFF);
+        {
+            if (ray_angle > M_PI && ray_angle < 2 * M_PI)
+            {
+                t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
+                mlx_put_pixel(player->img,i,wall_t, color); // down
+            }
+            else
+            {
+                t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
+                mlx_put_pixel(player->img,i,wall_t, color); // up
+            }
+        }
+        wall_t++;
+    }
     while (wall_b >0 && wall_b < WIDTH)
         mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
     while ( sq>=0)

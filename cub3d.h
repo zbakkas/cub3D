@@ -18,11 +18,19 @@
 #define MAP_V "MAP is not valid"
 #define PY_ERR "ERR dont have Player"
 
+typedef unsigned int t_int;
+
 typedef struct s_point
 {
 	int	x;
 	int	y;
 }		t_point;
+
+typedef struct s_fpoint
+{
+	double	x;
+	double	y;
+}		t_fpoint;
 
 typedef struct s_map
 {
@@ -53,6 +61,36 @@ typedef struct s_inf
 	int		color_f;
 }			t_inf;
 
+typedef struct s_player
+{
+	char	**map;
+	float	x;
+	float	y;
+	int 	map_height;
+	int		map_weidth;
+	unsigned int	color_sky;
+	unsigned int	color_floor;		
+	double	angle;
+	float 	ro;  // In radians
+
+	mlx_image_t* img;
+	mlx_image_t *black;
+	mlx_image_t *ray;
+	mlx_image_t *wall;
+	mlx_t *mlx;
+	int yy;
+	bool space;
+	int time_space;
+	bool player_up;
+	bool player_down;
+	double	wall_t;
+	double	wall_b;
+	mlx_texture_t *n_texter;
+	mlx_texture_t *s_texter;
+	mlx_texture_t *e_texter;
+	mlx_texture_t *w_texter;
+} t_player;
+
 //all function for paring
 void	print_map(char **map);
 int		get_max(t_map *map);
@@ -80,36 +118,8 @@ bool	catch_color(char *p_color, int *n_color);
 void    take_information(t_map *map, t_inf *inf);
 char	*fill_spaces(char	*str, int len, int size);
 bool	check_wall(char **map, t_point begin, t_point size);
-
+t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 // all function for recasting
-
-typedef struct s_player
-{
-	char	**map;
-	float	x;
-	float	y;
-	int 	map_height;
-	int		map_weidth;
-	unsigned int	color_sky;
-	unsigned int	color_floor;		
-	double	angle;
-	float 	ro;  // In radians
-
-	mlx_image_t* img;
-	mlx_image_t *black;
-	mlx_image_t *ray;
-	mlx_image_t *wall;
-	mlx_t *mlx;
-	int yy;
-	bool space;
-	int time_space;
-	bool player_up;
-	bool player_down;
-		mlx_texture_t *n_texter;
-	mlx_texture_t *s_texter;
-	mlx_texture_t *e_texter;
-	mlx_texture_t *w_texter;
-} t_player;
 
 #define MOVE_SPEED 10
 #define ROTATE_SPEED 10 * (M_PI/180) //0.01745329252 =>> 0.1745329252
