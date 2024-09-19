@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/19 10:49:29 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/19 12:01:06 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,13 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
             }
         wall_t++;
     }
-    while (wall_b >0 && wall_b < WIDTH)
+    while (wall_b >0 && wall_b < HEIGHT)
         mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
-    while ( sq>=0)
+    while ( sq>0 && sq< HEIGHT)
+    {
+        // printf("%f\n",sq);
         mlx_put_pixel(player->img,i,sq--, player->color_sky);
+    }
 }
 double get_h(t_player *player, double ray_angle)
 {
@@ -412,13 +415,13 @@ void f_mouse( void *param)
     {
         player->ro= -MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        // printf("left\n");
+        printf("left\n");
     }
     else if( xx-15> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        // printf("rigth\n");
+        printf("rigth\n");
     }
     
      if(yy+15<HEIGHT/2 && player->yy <= HEIGHT)
@@ -463,6 +466,7 @@ void jump(t_player *player)
     }
 }
 
+
 void game_loop(void *param)
 {
     t_player *player= (t_player*)param;
@@ -472,10 +476,9 @@ void game_loop(void *param)
     mlx_delete_image(player->mlx,player->img);
     player->img = mlx_new_image(player->mlx, 1500, 1200);
 
-    mlx_delete_image(player->mlx,player->ray);
-    player->ray = mlx_new_image(player->mlx, 1500, 1200);
+    
+    
      mlx_image_to_window(player->mlx, player->img, 0, 0);
-    mlx_image_to_window(player->mlx, player->ray, 0, 0);
    /// 
     // printf("11111\n");
 
@@ -488,7 +491,13 @@ void game_loop(void *param)
     draw_rays2(player);
     clear_screen(player);
    mini_map(player);
-    f_mouse(player);
+    if(player->start_mouse--<0)
+    {
+        f_mouse(player);
+        player->start_mouse=-1;
+    }
+    else    
+        mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
     player->ro =0 ;
 }
 
@@ -501,6 +510,7 @@ int main(int arc, char **arv)
 	player.time_space = 12;
 	player.player_down =true;
 	player.player_up =false;
+    player.start_mouse =15;
 
 	if (arc == 2)
 		init_all_data(arv, &player);
@@ -512,8 +522,8 @@ int main(int arc, char **arv)
     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
 
     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-    player.wall = mlx_new_image(player.mlx, WIDTH, HEIGHT);
     player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+
     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
  
@@ -522,15 +532,14 @@ int main(int arc, char **arv)
     mlx_put_pixel(player.img, (player.x), (player.y), 0xFF0000FF);
 
 
-    mlx_image_to_window(player.mlx, player.wall, 0, 0);
     mlx_image_to_window(player.mlx, player.black, 0, 0);
     mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    mlx_set_mouse_pos(player.mlx,WIDTH/2,HEIGHT/2);
-    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+    // mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
     mlx_loop_hook(player.mlx,game_loop,&player);
+    
     
     // mlx_scroll_hook(player.mlx,&f_mouse,&player);
     
@@ -538,3 +547,4 @@ int main(int arc, char **arv)
 
     return 0;
 }
+

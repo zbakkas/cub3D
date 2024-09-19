@@ -75,8 +75,6 @@ typedef struct s_player
 
 	mlx_image_t* img;
 	mlx_image_t *black;
-	mlx_image_t *ray;
-	mlx_image_t *wall;
 	mlx_t *mlx;
 	int yy;
 	bool space;
@@ -86,6 +84,7 @@ typedef struct s_player
 	bool player_down;
 	double	wall_t;
 	double	wall_b;
+	int start_mouse;
 	mlx_texture_t *n_texter;
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
