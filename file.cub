@@ -1,8 +1,8 @@
-SO ./textures/bluestone.png
-NO ./textures/eagle.png
+SO ./textures/eagle.png
+NO ./textures/bluestone.png
 
-WE ./textures/pillar.png
-EA ./textures/purplestone.png
+WE ./textures/wall_4.png
+EA ./textures/wall_3.png
 
 C 0, 248, 253
 F 17,71, 95

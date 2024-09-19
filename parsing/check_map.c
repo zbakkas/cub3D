@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:44:49 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/16 19:56:59 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/19 11:03:06 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ bool	color_is_valid(char	**color, int **color_)
 	if (n_color.r > 255 || n_color.r < 0 || n_color.g > 255
 		|| n_color.g < 0 || n_color.b > 255 || n_color.b < 0)
 		return (false);
-	**color_ = (n_color.r << 16 | n_color.g << 8 | n_color.b);
+	**color_ = (n_color.r << 24 | n_color.g << 16 | n_color.b << 8 | 255);
 	return (true);
 }
 bool	catch_color(char *p_color, int *n_color)

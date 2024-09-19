@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/17 12:44:01 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/19 10:49:29 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,32 +79,42 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
 
     player->wall_t = wall_t;
     player->wall_b = wall_b;
+    player->is_vertical = flag;
     while (wall_t< wall_b)
     {
-        if(flag) //vertical
-        {
-            if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
-            {
-                // load_colors(player, player->w_texter, t_fpoint(i, wall_t));
-                mlx_put_pixel(player->img,i,wall_t,0x80FF40);
-            }
-            if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
-                || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
-                mlx_put_pixel(player->img,i,wall_t,0xFFFF20);
-        }
+                if(flag) //vertical
+                {
+                    if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
+                    {
+                        t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
+                        mlx_put_pixel(player->img,i,wall_t, color);
+                    }
+                    if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
+                        || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
+                    {
+                        t_int color = load_colors(player, player->e_texter, (t_fpoint){i, wall_t});
+                        mlx_put_pixel(player->img,i,wall_t, color);
+                    }
+                }
         else    
         {
-            if (ray_angle > M_PI && ray_angle < 2 * M_PI)
-            {
-                t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
-                mlx_put_pixel(player->img,i,wall_t, color); // down
+                if (ray_angle > M_PI && ray_angle < 2 * M_PI)
+                {
+                    // for (int j =0; j < 8; j++)
+                    // {
+                        t_int color = load_colors(player, player->s_texter, (t_fpoint){i, wall_t});
+                        mlx_put_pixel(player->img,i,wall_t, color); // down
+                    // }
+                }
+                else
+                {
+                    // for (int j =0; j < 8; j++)
+                    // {
+                        t_int color = load_colors(player, player->n_texter, (t_fpoint){i, wall_t});
+                        mlx_put_pixel(player->img,i,wall_t, color); // up
+                    // }
+                }
             }
-            else
-            {
-                t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
-                mlx_put_pixel(player->img,i,wall_t, color); // up
-            }
-        }
         wall_t++;
     }
     while (wall_b >0 && wall_b < WIDTH)
@@ -402,13 +412,13 @@ void f_mouse( void *param)
     {
         player->ro= -MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        printf("left\n");
+        // printf("left\n");
     }
     else if( xx-15> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        printf("rigth\n");
+        // printf("rigth\n");
     }
     
      if(yy+15<HEIGHT/2 && player->yy <= HEIGHT)

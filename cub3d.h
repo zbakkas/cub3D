@@ -80,6 +80,7 @@ typedef struct s_player
 	mlx_t *mlx;
 	int yy;
 	bool space;
+	bool is_vertical;
 	int time_space;
 	bool player_up;
 	bool player_down;
