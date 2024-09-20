@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilise3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:29:06 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/19 09:46:19 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:23:11 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void back_to_default(char **map)
 	}
 }
 
-t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
+t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x,double ray_angle)
 {
 	double x_texture;
 	double y_texture;
@@ -65,16 +65,20 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 
 	color = 0;
 	// return (0xff60ff);
+
+
+	int ll = (int)(ray_angle * texture->width / (M_PI * 2)) % (int)texture->width;
+	
 	size_wall =  player->wall_b - player->wall_t;
 	//calcule x_texture position
 	if (!player->is_vertical)
 	{
 		// tmp= (int)x.x % PEX;
 		// x_texture = texture->width /  (PEX / tmp);
-		x_texture = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
+		x_texture = ((x.x / ll) - floor(x.x / ll)) * texture->width;
 	}
 	else
-		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
+		x_texture = ((x.y / ll) - floor(x.y / ll)) * texture->width;
 	//
 	//calcule y_texture position
 	tmp = (x.y - player->wall_t) * texture->height;

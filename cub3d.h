@@ -89,6 +89,15 @@ typedef struct s_player
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
 	mlx_texture_t *w_texter;
+
+	mlx_texture_t  *wall_texture;
+
+mlx_texture_t *texture_north;
+mlx_texture_t *texture_south;
+mlx_texture_t *texture_west;
+mlx_texture_t *texture_east;
+
+
 } t_player;
 
 //all function for paring
@@ -118,7 +127,7 @@ bool	catch_color(char *p_color, int *n_color);
 void    take_information(t_map *map, t_inf *inf);
 char	*fill_spaces(char	*str, int len, int size);
 bool	check_wall(char **map, t_point begin, t_point size);
-t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
+t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x,double ray_angle);
 // all function for recasting
 
 #define MOVE_SPEED 10

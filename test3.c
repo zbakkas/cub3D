@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/19 12:01:06 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/20 14:49:07 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@
 //     mlx_t *mlx;
 //     char **map;
 // } t_player;
-
+typedef struct s_intersection {
+    double distance;
+    double x;
+    double y;
+} t_intersection;
 
 
 float normal_ang(double angle)
@@ -43,6 +47,17 @@ float normal_ang(double angle)
         angle = M_PI*2+angle;
     return angle;
 }
+
+uint32_t get_texture_pixel(mlx_texture_t *texture, int x, int y)
+{
+    if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
+        return 0; // Out of bounds, return a default color (e.g., black)
+    
+    // Calculate the pixel location in the texture data
+    uint32_t *pixels = (uint32_t *)texture->pixels;
+    return pixels[y * texture->width + x];
+}
+
 
 void clear_screen(t_player *p)
 {
@@ -60,277 +75,173 @@ void clear_screen(t_player *p)
     }
 }
 
-void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int flag)
+void render_wall(t_player *player, double ray_length, int i, double ray_angle, int flag, double intersection_x, double intersection_y)
 {
     double wall_light;
     double wall_b;
     double wall_t;
-    double sq ;
+    double sq;
+    int texture_x, texture_y;
+    int texture_height = player->wall_texture->height;
+    int texture_width = player->wall_texture->width;
     
+    // Correct fisheye effect
     ray_length *= cos(ray_angle - player->angle);
-    wall_light =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
-    wall_b= ((HEIGHT/2)+(wall_light/2)) +player->yy;
-    wall_t= ((HEIGHT/2)-(wall_light/2))+player->yy;
-    if(wall_b> HEIGHT)  
-        wall_b =HEIGHT;
-    if(wall_t<0)
-        wall_t=0;
+
+    // Calculate projected wall height
+    wall_light = (PEX / ray_length) * (WIDTH / 2) / tan(FOV / 2);
+    wall_b = ((HEIGHT / 2) + (wall_light / 2)) + player->yy;
+    wall_t = ((HEIGHT / 2) - (wall_light / 2)) + player->yy;
+
+    if (wall_b > HEIGHT)  
+        wall_b = HEIGHT;
+    if (wall_t < 0)
+        wall_t = 0;
     sq = wall_t;
 
-    player->wall_t = wall_t;
-    player->wall_b = wall_b;
-    player->is_vertical = flag;
-    while (wall_t< wall_b)
+    // Determine which part of the texture to use (X coordinate)
+    if (flag == 1) // Vertical wall hit
     {
-                if(flag) //vertical
-                {
-                    if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
-                    {
-                        t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color);
-                    }
-                    if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
-                        || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
-                    {
-                        t_int color = load_colors(player, player->e_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color);
-                    }
-                }
-        else    
-        {
-                if (ray_angle > M_PI && ray_angle < 2 * M_PI)
-                {
-                    // for (int j =0; j < 8; j++)
-                    // {
-                        t_int color = load_colors(player, player->s_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color); // down
-                    // }
-                }
-                else
-                {
-                    // for (int j =0; j < 8; j++)
-                    // {
-                        t_int color = load_colors(player, player->n_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color); // up
-                    // }
-                }
-            }
+        texture_x = (int)(intersection_y) % texture_width;
+    }
+    else // Horizontal wall hit
+    {
+        texture_x = (int)(intersection_x) % texture_width;
+    }
+
+    // Loop through each pixel of the wall slice and map texture
+    while (wall_t < wall_b)
+    {
+        // Calculate Y coordinate on the texture
+        texture_y = (int)((wall_t - sq) * texture_height / wall_light);
+
+        // Sample the color from the texture
+        uint32_t color = get_texture_pixel(player->wall_texture, texture_x, texture_y);
+
+        // Draw the pixel on the screen
+        mlx_put_pixel(player->img, i, wall_t, color);
+        
         wall_t++;
     }
-    while (wall_b >0 && wall_b < HEIGHT)
-        mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
-    while ( sq>0 && sq< HEIGHT)
-    {
-        // printf("%f\n",sq);
-        mlx_put_pixel(player->img,i,sq--, player->color_sky);
-    }
+
+    // Draw the floor and ceiling (sky and ground)
+    while (wall_b > 0 && wall_b < HEIGHT)
+        mlx_put_pixel(player->img, i, wall_b++, player->color_floor);
+    
+    while (sq > 0 && sq < HEIGHT)
+        mlx_put_pixel(player->img, i, sq--, player->color_sky);
 }
-double get_h(t_player *player, double ray_angle)
+
+
+t_intersection get_h(t_player *player, double ray_angle)
 {
+    t_intersection result;
     double first_y;
     double first_x;
     double ya;
     double xa;
-    double next_h_x;
-    double next_h_y;
-    
-    if(ray_angle > 0 && ray_angle < M_PI)//down
-        first_y =(floor(player->y/PEX)*PEX)+PEX;
-    else    
-        first_y =(floor(player->y/PEX) *PEX)-0.00001;
 
-    first_x = player->x+((first_y-player->y)/tan(ray_angle));
-
-    next_h_x = first_x;
-    next_h_y = first_y;
-
-    if(ray_angle > 0 && ray_angle < M_PI)
-        ya=PEX;
-    else    
-        ya=-PEX;
-    xa = ya/tan(ray_angle);
-    while (next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)
-    {
-        if((int)(next_h_y/PEX) < player->map_height &&((int)(next_h_x/PEX)) < (int)strlen(player->map[(int)(next_h_y/PEX)]) && player->map[(int)(next_h_y/PEX)][(int)(next_h_x/PEX)]=='1')
-            return (sqrt(pow(next_h_x - player->x, 2) + pow(next_h_y - player->y, 2)));
-        else
-        {
-            next_h_x+=xa;
-            next_h_y+=ya;
-        }
-    }
-    return 99999999999999;
-}
-
-double get_v(t_player *player ,double ray_angle)
-{
-    double first_x;
-    double first_y;
-    double next_v_x;
-    double  next_v_y;
-    double xa;
-    double ya;
-    
-      // if(ray_angle < (0.5*M_PI) || ray_angle >(1.5*M_PI))//rigth
-    if(!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))
-        first_x=(floor(player->x/PEX)*PEX)+PEX;
-    else    
-        first_x = (floor(player->x/PEX)*PEX)-0.001;
-
-    first_y = player->y+( first_x -player->x)*tan(ray_angle);
-
-    next_v_x =first_x;
-    next_v_y =first_y;
-     if(!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))
-        xa =PEX;
+    if(ray_angle > 0 && ray_angle < M_PI) // Down
+        first_y = (floor(player->y / PEX) * PEX) + PEX;
     else
-        xa=-PEX;
-    ya= xa*tan(ray_angle);
-    while (next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT)
-    {
-        if((int)(next_v_y/PEX) < player->map_height &&((int)(next_v_x/PEX)) < (int)strlen(player->map[(int)(next_v_y/PEX)]) && player->map[(int)(next_v_y/PEX)][(int)(next_v_x/PEX)]=='1')
-            return (sqrt(pow(next_v_x - player->x, 2) + pow(next_v_y - player->y, 2)));
-        else
-        {
+        first_y = (floor(player->y / PEX) * PEX) - 0.00001;
 
-            next_v_x+=xa;
-            next_v_y+=ya;
+    first_x = player->x + ((first_y - player->y) / tan(ray_angle));
+
+    if (ray_angle > 0 && ray_angle < M_PI)
+        ya = PEX;
+    else
+        ya = -PEX;
+    xa = ya / tan(ray_angle);
+
+    while (first_x >= 0 && first_x <= WIDTH && first_y >= 0 && first_y <= HEIGHT) {
+        if ((int)(first_y / PEX) < player->map_height &&
+            (int)(first_x / PEX) < (int)strlen(player->map[(int)(first_y / PEX)]) &&
+            player->map[(int)(first_y / PEX)][(int)(first_x / PEX)] == '1') {
+            result.distance = sqrt(pow(first_x - player->x, 2) + pow(first_y - player->y, 2));
+            result.x = first_x;
+            result.y = first_y;
+            return result;
         }
+        first_x += xa;
+        first_y += ya;
     }
-    return 99999999999999;
+    result.distance = 10e9;
+    return result;
+}
+
+t_intersection get_v(t_player *player, double ray_angle)
+{
+    t_intersection result;
+    double first_x;
+    double first_y;
+    double xa;
+    double ya;
+
+    if (!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2)) // Right
+        first_x = (floor(player->x / PEX) * PEX) + PEX;
+    else
+        first_x = (floor(player->x / PEX) * PEX) - 0.001;
+
+    first_y = player->y + (first_x - player->x) * tan(ray_angle);
+
+    if (!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))
+        xa = PEX;
+    else
+        xa = -PEX;
+    ya = xa * tan(ray_angle);
+
+    while (first_x >= 0 && first_x <= WIDTH && first_y >= 0 && first_y <= HEIGHT) {
+        if ((int)(first_y / PEX) < player->map_height &&
+            (int)(first_x / PEX) < (int)strlen(player->map[(int)(first_y / PEX)]) &&
+            player->map[(int)(first_y / PEX)][(int)(first_x / PEX)] == '1') {
+            result.distance = sqrt(pow(first_x - player->x, 2) + pow(first_y - player->y, 2));
+            result.x = first_x;
+            result.y = first_y;
+            return result;
+        }
+        first_x += xa;
+        first_y += ya;
+    }
+    result.distance = 99999999999999;
+    return result;
 }
 
 
 void draw_rays2(t_player *player)
 {
-    // printf("yy_in_rays==%d\n",player->yy);
-  
-    int i=0;
-    double distance_h;
-    double distance_v ;
+    int i = 0;
+    t_intersection h_intersection;
+    t_intersection v_intersection;
     double ray_length;
-    distance_h=0;
-    distance_v=0;
-    ray_length =0;
     
-    float ray_angle = (normal_ang(player->angle) -FOV/2 );
-    while (i< NUM_RAYS)
+    float ray_angle = normal_ang(player->angle - FOV / 2);
+    while (i < NUM_RAYS)
     {
         ray_angle = normal_ang(ray_angle);
-        int flag =0;
+        int flag = 0;
 
-        /////H//////////////
-       
-        distance_h = get_h(player,ray_angle);
-   
-        /////////////-V-//////////////
-        distance_v =get_v(player,ray_angle);
+        // Get horizontal and vertical intersections
+        h_intersection = get_h(player, ray_angle);
+        v_intersection = get_v(player, ray_angle);
 
-        //////////
-        if(distance_v< distance_h)
-        {
-            ray_length = distance_v;
-            flag =1;
+        // Use the closer of the two intersections
+        if (v_intersection.distance < h_intersection.distance) {
+            ray_length = v_intersection.distance;
+            flag = 1; // Vertical wall
+        } else {
+            ray_length = h_intersection.distance;
         }
-        else
-            ray_length = distance_h;
-        //////////////wall 3D
-        // if((next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)||(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT))
-            render_wall(player,ray_length,i,ray_angle,flag);
-        //////////
+
+        // Render wall with texture mapping
+        render_wall(player, ray_length, i, ray_angle, flag, 
+                    (flag ? v_intersection.x : h_intersection.x),
+                    (flag ? v_intersection.y : h_intersection.y));
+        
         i++;
-        ray_angle+=(FOV/NUM_RAYS);
-        
+        ray_angle += (FOV / NUM_RAYS);
     }
 }
-
-
-void mini_map(t_player *player)
-{
-    
-    double x =player->x/2;
-    double y=player->y/2;
-    int h = 8 * (PEX/2);
-    int v = 6 * (PEX/2);
-    double start_y= y-v;
-    double end_y = y+v;
-
-    
-    while (start_y < end_y)
-    {
-        double start_x =x-h;
-        double end_x = x+h;
-        while (start_x < end_x)
-        {
-            if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< player->map_height && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='1')
-            {
-                mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFFFFFFFF);
-            }
-            else
-                mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0x000000FF);
-
-            start_x++;
-        }
-        
-        start_y++;
-    }
-    
- ///cadre_map/////
-    int max_c_m_x =(h*2);
-    int max_c_m_y =(v*2);
-    int c_m_x=0;
-    int c_m_y =0;
-    while (c_m_x < max_c_m_x)
-    {
-        mlx_put_pixel(player->img,c_m_x,0,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x,1,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x++,2,0xFF0000FF);
-
-    }
-    c_m_x =0;
-    while (c_m_x < max_c_m_x)
-    {
-        mlx_put_pixel(player->img,c_m_x,max_c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x,max_c_m_y- 1,0xFF0000FF);
-        mlx_put_pixel(player->img,c_m_x++,max_c_m_y- 2,0xFF0000FF);
-
-    }
-    while (c_m_y< max_c_m_y)
-    {
-        mlx_put_pixel(player->img,0,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,1,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,2,c_m_y++,0xFF0000FF);
-    }
-    c_m_y =0 ;
-    while (c_m_y< max_c_m_y)
-    {
-        mlx_put_pixel(player->img,max_c_m_x,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,max_c_m_x-1,c_m_y,0xFF0000FF);
-        mlx_put_pixel(player->img,max_c_m_x-2,c_m_y++,0xFF0000FF);
-    }
-    ///////
-    mlx_put_pixel(player->img,h,v,0xFF0000FF);
-    mlx_put_pixel(player->img,h+1,v,0xFF0000FF);
-    mlx_put_pixel(player->img,h-1,v,0xFF0000FF);
-    mlx_put_pixel(player->img,h,v+1,0xFF0000FF);
-    mlx_put_pixel(player->img,h,v-1,0xFF0000FF);
-    mlx_put_pixel(player->img,h+1,v+1,0xFF0000FF);
-    mlx_put_pixel(player->img,h-1,v-1,0xFF0000FF);
-    mlx_put_pixel(player->img,h+1,v-1,0xFF0000FF);
-    mlx_put_pixel(player->img,h-1,v+1,0xFF0000FF);
-    int ii =0;
-    while (ii < 10)
-    {
-        double an_x = h+(cos(normal_ang(player->angle)) *ii);
-        double an_y= v+(sin(normal_ang(player->angle))*ii);
-        mlx_put_pixel(player->img,an_x,an_y,0xFF0000FF);
-
-    ii++;
-    }
-    
-
-}
-
 
 void key_mov(t_player * player, float x, float y)
 {
@@ -470,27 +381,15 @@ void jump(t_player *player)
 void game_loop(void *param)
 {
     t_player *player= (t_player*)param;
-    // printf("0000\n");
-///
-
     mlx_delete_image(player->mlx,player->img);
     player->img = mlx_new_image(player->mlx, 1500, 1200);
-
-    
-    
      mlx_image_to_window(player->mlx, player->img, 0, 0);
-   /// 
-    // printf("11111\n");
-
-   
-    ////////
     mlx_key_hook(player->mlx, my_keyhook, player);
 
    jump(player);
 //    printf("%f\n",normal_ang(player->angle));
     draw_rays2(player);
     clear_screen(player);
-   mini_map(player);
     if(player->start_mouse--<0)
     {
         f_mouse(player);
@@ -526,17 +425,27 @@ int main(int arc, char **arv)
 
     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
- 
+    
 
     player.img = mlx_new_image(player.mlx, 1500, 1200);
     mlx_put_pixel(player.img, (player.x), (player.y), 0xFF0000FF);
+
+
+player.wall_texture = mlx_load_png("textures/eagle.png");
+
+
+
+player.texture_north = mlx_load_png("textures/wall_1.png");
+player.texture_south = mlx_load_png("textures/wall_2.png");
+player.texture_west = mlx_load_png("textures/wall_3.png");
+player.texture_east = mlx_load_png("textures/wall_4.png");
 
 
     mlx_image_to_window(player.mlx, player.black, 0, 0);
     mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    // mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
     mlx_loop_hook(player.mlx,game_loop,&player);
     
