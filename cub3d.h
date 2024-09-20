@@ -83,7 +83,7 @@ typedef struct s_player
 	bool player_up;
 	bool player_down;
 	double	wall_t;
-	double	wall_b;
+	double	pos_y;
 	double	wall_light;
 	int start_mouse;
 	mlx_texture_t *n_texter;

@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/20 17:08:32 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/20 20:56:23 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,6 @@ void render_wall(t_player *player, double ray_length, int i, double ray_angle, i
 	double wall_b;
 	double wall_t;
 	double sq;
-	int texture_x, texture_y;
-	int texture_height = player->wall_texture->height;
-	int texture_width = player->wall_texture->width;
 	
 	// Correct fisheye effect
 	ray_length *= cos(ray_angle - player->angle);
@@ -93,20 +90,11 @@ void render_wall(t_player *player, double ray_length, int i, double ray_angle, i
 	wall_b = ((HEIGHT / 2) + (wall_light / 2)) + player->yy;
 	wall_t = ((HEIGHT / 2) - (wall_light / 2)) + player->yy;
 
-	if (wall_b > HEIGHT)  
+	if (wall_b > HEIGHT) 
 		wall_b = HEIGHT;
 	if (wall_t < 0)
 		wall_t = 0;
 
-	// Determine which part of the texture to use (X coordinate)
-	// if (flag == 1) // Vertical wall hit
-	// {
-	// 	texture_x = (int)(intersection_y) % texture_width;
-	// }
-	// else // Horizontal wall hit
-	// {
-	// 	texture_x = (int)(intersection_x) % texture_width;
-	// }
 	player->wall_t = wall_t;
 	// player->wall_b = wall_b;
 	player->wall_light = wall_light;
@@ -115,7 +103,7 @@ void render_wall(t_player *player, double ray_length, int i, double ray_angle, i
 	// Loop through each pixel of the wall slice and map texture
 	while (wall_t < wall_b)
 	{
-		player->wall_b = wall_t;
+		player->pos_y = wall_t;
 		// texture_y = (int)((wall_t - player->wall_t) * texture_height / wall_light);
 		if (flag)
 		{
@@ -255,12 +243,11 @@ void draw_rays2(t_player *player)
 		} else {
 			ray_length = h_intersection.distance;
 		}
-
 		// Render wall with texture mapping
-		render_wall(player, ray_length, i, ray_angle, flag, 
-					(flag ? v_intersection.x : h_intersection.x),
-					(flag ? v_intersection.y : h_intersection.y));
-		
+		if (flag)
+			render_wall(player, ray_length, i, ray_angle, flag, v_intersection.x, v_intersection.y);
+		else
+			render_wall(player, ray_length, i, ray_angle, flag, h_intersection.x, h_intersection.y);		
 		i++;
 		ray_angle += (FOV / NUM_RAYS);
 	}
