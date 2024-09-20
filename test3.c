@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/19 12:01:06 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/19 15:09:31 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -536,7 +536,7 @@ int main(int arc, char **arv)
     mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    // mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+    mlx_set_cursor_mode(player.mlx, MLX_MOUSE_HIDDEN);
    
     mlx_loop_hook(player.mlx,game_loop,&player);
     

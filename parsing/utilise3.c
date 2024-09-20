@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utilise3.c                                         :+:      :+:    :+:   */
@@ -68,11 +68,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	size_wall =  player->wall_b - player->wall_t;
 	//calcule x_texture position
 	if (!player->is_vertical)
-	{
-		// tmp= (int)x.x % PEX;
-		// x_texture = texture->width /  (PEX / tmp);
 		x_texture = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
-	}
 	else
 		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
 	//
