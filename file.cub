@@ -1,7 +1,7 @@
 SO ./textures/eagle.png
 NO ./textures/bluestone.png
 
-WE ./textures/wall_4.png
+WE ./textures/sky_1.png
 EA ./textures/wall_3.png
 
 C 0, 248, 253

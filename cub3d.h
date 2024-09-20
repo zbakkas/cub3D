@@ -84,6 +84,7 @@ typedef struct s_player
 	bool player_down;
 	double	wall_t;
 	double	wall_b;
+	double	wall_light;
 	int start_mouse;
 	mlx_texture_t *n_texter;
 	mlx_texture_t *s_texter;
@@ -127,7 +128,7 @@ bool	catch_color(char *p_color, int *n_color);
 void    take_information(t_map *map, t_inf *inf);
 char	*fill_spaces(char	*str, int len, int size);
 bool	check_wall(char **map, t_point begin, t_point size);
-t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x,double ray_angle);
+t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 // all function for recasting
 
 #define MOVE_SPEED 10

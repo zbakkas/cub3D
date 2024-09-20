@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilise3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:29:06 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/20 12:23:11 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/20 17:08:19 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void back_to_default(char **map)
 	}
 }
 
-t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x,double ray_angle)
+t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 {
-	double x_texture;
-	double y_texture;
+	t_int x_texture;
+	t_int y_texture;
 	double	size_wall;
 	double	tmp;
 	t_int	pos;
@@ -64,25 +64,26 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x,double ra
 	t_int	color;
 
 	color = 0;
-	// return (0xff60ff);
+	int texture_height;
+	int texture_width;
 
-
-	int ll = (int)(ray_angle * texture->width / (M_PI * 2)) % (int)texture->width;
-	
+	texture_height = texture->height;
+	texture_width = texture->width;
 	size_wall =  player->wall_b - player->wall_t;
 	//calcule x_texture position
 	if (!player->is_vertical)
-	{
-		// tmp= (int)x.x % PEX;
-		// x_texture = texture->width /  (PEX / tmp);
-		x_texture = ((x.x / ll) - floor(x.x / ll)) * texture->width;
-	}
+		x_texture = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
 	else
-		x_texture = ((x.y / ll) - floor(x.y / ll)) * texture->width;
-	//
+		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
 	//calcule y_texture position
-	tmp = (x.y - player->wall_t) * texture->height;
-	y_texture = tmp / size_wall;
+	// tmp = (int)(x.y - player->wall_t) * texture->height;
+	// y_texture = tmp / player->wall_light;
+	
+	// if (player->is_vertical)
+	// 	x_texture = (int)x.y % texture->width;
+	// else
+	// 	x_texture = (int)x.x % texture->width;
+	y_texture = (int)(player->wall_b - player->wall_t) * texture_height / player->wall_light;
 	pos = ((int)y_texture * texture->width * texture->bytes_per_pixel) + (int)x_texture * texture->bytes_per_pixel;
 	if (pos < 0 || y_texture < 0 || y_texture >= texture->height
 		|| x_texture < 0 || x_texture >= texture->width || pos >= texture->width * texture->height * texture->bytes_per_pixel)
