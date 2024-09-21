@@ -63,6 +63,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	t_int	color;
 
 	color = 0;
+	// return(0);
 	int texture_height;
 	int texture_width;
 

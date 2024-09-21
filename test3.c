@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/21 11:17:06 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/21 15:38:16 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,6 +394,11 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
 
     if (keydata.key == MLX_KEY_ESCAPE)
         exit(0);
+    if(keydata.key ==MLX_KEY_LEFT_SHIFT)
+    {
+        player->is_fire =true;
+        printf("fire\n");
+    }
 
 }
 
@@ -469,14 +474,39 @@ void game_loop(void *param)
     // printf("0000\n");
 ///
 
-    mlx_delete_image(player->mlx,player->img);
-    player->img = mlx_new_image(player->mlx, 1500, 1200);
+    // mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture->width) /2, (HEIGHT - player->gun_texture->height) );
+    // mlx_delete_image(player->mlx,player->img);
 
-    
-    
-     mlx_image_to_window(player->mlx, player->img, 0, 0);
+    // player->img = mlx_new_image(player->mlx, 1500, 1200);
+    // mlx_image_to_window(player->mlx, player->img, 0, 0);
    /// 
     // printf("11111\n");
+    //////////////////////
+    mlx_delete_image(player->mlx,player->gun_image);
+    if(player->is_fire)
+    {
+        // player->gun_image = mlx_new_image(player->mlx, 1500, 1200);
+        player->gun_image= mlx_texture_to_image(player->mlx,player->gun_texture[player->i_fire]);
+        mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture[player->i_fire]->width) /2 , (HEIGHT - player->gun_texture[player->i_fire]->height) );
+        if(player->i_time >1 )
+        {
+         player->i_fire++;
+            player->i_time=0;
+        }
+         
+        if(player->i_fire ==11)
+        {
+            player->i_fire =0;
+            player->is_fire =false;
+        }
+        player->i_time++;
+    }
+    else
+    {
+        player->gun_image= mlx_texture_to_image(player->mlx,player->gun_texture[0]);
+        mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture[0]->width) /2 , (HEIGHT - player->gun_texture[0]->height) );
+    }
+        
 
    
     ////////
@@ -495,6 +525,12 @@ void game_loop(void *param)
     else    
         mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
     player->ro =0 ;
+
+
+
+
+   
+    
 }
 
 int main(int arc, char **arv)
@@ -502,6 +538,8 @@ int main(int arc, char **arv)
     
     t_player	player;
     	player.yy =0;
+        player.i_fire =0;
+        player.i_time =0;
 	player.space =false;
 	player.time_space = 12;
 	player.player_down =true;
@@ -523,16 +561,33 @@ int main(int arc, char **arv)
     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
     
+////////////////////////////////////////
+   
 
-    player.img = mlx_new_image(player.mlx, 1500, 1200);
-    mlx_put_pixel(player.img, (player.x), (player.y), 0xFF0000FF);
+    player.gun_texture =malloc(10*sizeof(mlx_texture_t));
+    
+    player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
+    player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
+    player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
+    player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
+    player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
+    player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
+    player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
+    player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
+    player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
+    player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
+    player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
+	
+    /////
+    player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
 
-    player.wall_texture = mlx_load_png("textures/eagle.png");
-
-
+    
     mlx_image_to_window(player.mlx, player.black, 0, 0);
     mlx_image_to_window(player.mlx, player.img, 0, 0);
+
+    
+    
     // mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
     mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);

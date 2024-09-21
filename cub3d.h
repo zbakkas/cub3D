@@ -91,7 +91,13 @@ typedef struct s_player
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
 	mlx_texture_t *w_texter;
-	mlx_texture_t  * wall_texture;
+	
+	
+	  mlx_texture_t **gun_texture;
+    mlx_image_t *gun_image;
+	bool is_fire;
+	int i_fire ;
+	int i_time;
 
 } t_player;
 
