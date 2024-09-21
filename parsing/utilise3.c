@@ -55,26 +55,27 @@ void back_to_default(char **map)
 
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 {
-	double x_texture;
-	double y_texture;
-	double	size_wall;
+	t_int x_texture;
+	t_int y_texture;
 	double	tmp;
 	t_int	pos;
 	uint8_t	*pixel_data;
 	t_int	color;
 
 	color = 0;
-	// return (0xff60ff);
-	size_wall =  player->wall_b - player->wall_t;
+	int texture_height;
+	int texture_width;
+
+	texture_height = texture->height;
+	texture_width = texture->width;
 	//calcule x_texture position
 	if (!player->is_vertical)
 		x_texture = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
 	else
 		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
-	//
 	//calcule y_texture position
-	tmp = (x.y - player->wall_t) * texture->height;
-	y_texture = tmp / size_wall;
+	tmp = (int)(player->pos_y - player->wall_t) * texture->height;
+	y_texture = tmp / player->wall_height;
 	pos = ((int)y_texture * texture->width * texture->bytes_per_pixel) + (int)x_texture * texture->bytes_per_pixel;
 	if (pos < 0 || y_texture < 0 || y_texture >= texture->height
 		|| x_texture < 0 || x_texture >= texture->width || pos >= texture->width * texture->height * texture->bytes_per_pixel)

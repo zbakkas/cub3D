@@ -84,12 +84,23 @@ typedef struct s_player
 	bool player_down;
 	double	wall_t;
 	double	wall_b;
+	double	pos_y;
+	double wall_height;
 	int start_mouse;
 	mlx_texture_t *n_texter;
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
 	mlx_texture_t *w_texter;
+	mlx_texture_t  * wall_texture;
+
 } t_player;
+
+typedef struct s_intersection {
+	double distance;
+	double x;
+	double y;
+} t_intersection;
+
 
 //all function for paring
 void	print_map(char **map);

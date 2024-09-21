@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/19 15:09:31 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/21 11:17:06 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,60 +60,55 @@ void clear_screen(t_player *p)
     }
 }
 
-void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int flag)
+void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int flag,t_intersection intersection)
 {
-    double wall_light;
+    double wall_height;
     double wall_b;
     double wall_t;
     double sq ;
     
     ray_length *= cos(ray_angle - player->angle);
-    wall_light =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
-    wall_b= ((HEIGHT/2)+(wall_light/2)) +player->yy;
-    wall_t= ((HEIGHT/2)-(wall_light/2))+player->yy;
+    wall_height =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
+    wall_b= ((HEIGHT/2)+(wall_height/2)) +player->yy;
+    wall_t= ((HEIGHT/2)-(wall_height/2))+player->yy;
     if(wall_b> HEIGHT)  
         wall_b =HEIGHT;
     if(wall_t<0)
         wall_t=0;
     sq = wall_t;
 
+    player->wall_height = wall_height;
     player->wall_t = wall_t;
-    player->wall_b = wall_b;
     player->is_vertical = flag;
     while (wall_t< wall_b)
     {
-                if(flag) //vertical
-                {
-                    if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
-                    {
-                        t_int color = load_colors(player, player->w_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color);
-                    }
-                    if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
-                        || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
-                    {
-                        t_int color = load_colors(player, player->e_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color);
-                    }
-                }
+        player->pos_y = wall_t;
+        if(flag) //vertical
+        {
+            if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
+            {
+                t_int color = load_colors(player, player->w_texter, (t_fpoint){intersection.x, intersection.y});
+				mlx_put_pixel(player->img,i,wall_t, color);
+            }
+            if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
+                || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
+            {
+                t_int color = load_colors(player, player->e_texter, (t_fpoint){intersection.x, intersection.y});
+				mlx_put_pixel(player->img,i,wall_t, color);
+            }
+        }
         else    
         {
-                if (ray_angle > M_PI && ray_angle < 2 * M_PI)
-                {
-                    // for (int j =0; j < 8; j++)
-                    // {
-                        t_int color = load_colors(player, player->s_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color); // down
-                    // }
-                }
-                else
-                {
-                    // for (int j =0; j < 8; j++)
-                    // {
-                        t_int color = load_colors(player, player->n_texter, (t_fpoint){i, wall_t});
-                        mlx_put_pixel(player->img,i,wall_t, color); // up
-                    // }
-                }
+            if (ray_angle > M_PI && ray_angle < 2 * M_PI)// down
+            {
+                t_int color = load_colors(player, player->s_texter, (t_fpoint){intersection.x, intersection.y});
+                mlx_put_pixel(player->img,i,wall_t, color); 
+            }
+            else// up
+            {
+                  t_int color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
+                mlx_put_pixel(player->img,i,wall_t, color); // up
+            }
             }
         wall_t++;
     }
@@ -125,14 +120,15 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         mlx_put_pixel(player->img,i,sq--, player->color_sky);
     }
 }
-double get_h(t_player *player, double ray_angle)
+t_intersection get_h(t_player *player, double ray_angle)
 {
+    t_intersection int_;
     double first_y;
     double first_x;
     double ya;
     double xa;
-    double next_h_x;
-    double next_h_y;
+    
+    int_.distance =99999999999999;
     
     if(ray_angle > 0 && ray_angle < M_PI)//down
         first_y =(floor(player->y/PEX)*PEX)+PEX;
@@ -141,36 +137,40 @@ double get_h(t_player *player, double ray_angle)
 
     first_x = player->x+((first_y-player->y)/tan(ray_angle));
 
-    next_h_x = first_x;
-    next_h_y = first_y;
+    int_.x = first_x;
+    int_.y = first_y;
 
     if(ray_angle > 0 && ray_angle < M_PI)
         ya=PEX;
     else    
         ya=-PEX;
     xa = ya/tan(ray_angle);
-    while (next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)
+    while (int_.x>=0 && int_.x<=WIDTH && int_.y >=0 && int_.y<=HEIGHT)
     {
-        if((int)(next_h_y/PEX) < player->map_height &&((int)(next_h_x/PEX)) < (int)strlen(player->map[(int)(next_h_y/PEX)]) && player->map[(int)(next_h_y/PEX)][(int)(next_h_x/PEX)]=='1')
-            return (sqrt(pow(next_h_x - player->x, 2) + pow(next_h_y - player->y, 2)));
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1')
+        {
+            int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
+            break;   
+        }
         else
         {
-            next_h_x+=xa;
-            next_h_y+=ya;
+            int_.x+=xa;
+            int_.y+=ya;
         }
     }
-    return 99999999999999;
+    return int_;
 }
 
-double get_v(t_player *player ,double ray_angle)
+t_intersection get_v(t_player *player ,double ray_angle)
 {
+    t_intersection int_;
     double first_x;
     double first_y;
-    double next_v_x;
-    double  next_v_y;
     double xa;
     double ya;
+
     
+    int_.distance =99999999999999;
       // if(ray_angle < (0.5*M_PI) || ray_angle >(1.5*M_PI))//rigth
     if(!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))
         first_x=(floor(player->x/PEX)*PEX)+PEX;
@@ -179,25 +179,28 @@ double get_v(t_player *player ,double ray_angle)
 
     first_y = player->y+( first_x -player->x)*tan(ray_angle);
 
-    next_v_x =first_x;
-    next_v_y =first_y;
+    int_.x =first_x;
+    int_.y =first_y;
      if(!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))
         xa =PEX;
     else
         xa=-PEX;
     ya= xa*tan(ray_angle);
-    while (next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT)
+    while (int_.x>=0 && int_.x<=WIDTH && int_.y >=0 && int_.y<=HEIGHT)
     {
-        if((int)(next_v_y/PEX) < player->map_height &&((int)(next_v_x/PEX)) < (int)strlen(player->map[(int)(next_v_y/PEX)]) && player->map[(int)(next_v_y/PEX)][(int)(next_v_x/PEX)]=='1')
-            return (sqrt(pow(next_v_x - player->x, 2) + pow(next_v_y - player->y, 2)));
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1')
+        {
+            int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
+            break;
+        }
         else
         {
 
-            next_v_x+=xa;
-            next_v_y+=ya;
+            int_.x+=xa;
+            int_.y+=ya;
         }
     }
-    return 99999999999999;
+    return int_;
 }
 
 
@@ -206,37 +209,30 @@ void draw_rays2(t_player *player)
     // printf("yy_in_rays==%d\n",player->yy);
   
     int i=0;
-    double distance_h;
-    double distance_v ;
-    double ray_length;
-    distance_h=0;
-    distance_v=0;
-    ray_length =0;
-    
+    t_intersection distance_h;
+    t_intersection distance_v;
     float ray_angle = (normal_ang(player->angle) -FOV/2 );
     while (i< NUM_RAYS)
     {
         ray_angle = normal_ang(ray_angle);
-        int flag =0;
 
         /////H//////////////
-       
         distance_h = get_h(player,ray_angle);
    
         /////////////-V-//////////////
         distance_v =get_v(player,ray_angle);
 
         //////////
-        if(distance_v< distance_h)
+        if(distance_v.distance <  distance_h.distance)
         {
-            ray_length = distance_v;
-            flag =1;
+            render_wall(player,distance_v.distance,i,ray_angle,1,distance_v);
         }
         else
-            ray_length = distance_h;
+        {
+            render_wall(player,distance_h.distance,i,ray_angle,0,distance_h);
+        }
         //////////////wall 3D
         // if((next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)||(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT))
-            render_wall(player,ray_length,i,ray_angle,flag);
         //////////
         i++;
         ray_angle+=(FOV/NUM_RAYS);
@@ -526,17 +522,20 @@ int main(int arc, char **arv)
 
     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
- 
+    
 
     player.img = mlx_new_image(player.mlx, 1500, 1200);
     mlx_put_pixel(player.img, (player.x), (player.y), 0xFF0000FF);
+
+
+    player.wall_texture = mlx_load_png("textures/eagle.png");
 
 
     mlx_image_to_window(player.mlx, player.black, 0, 0);
     mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.img, 0, 0);
     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    mlx_set_cursor_mode(player.mlx, MLX_MOUSE_HIDDEN);
+    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
     mlx_loop_hook(player.mlx,game_loop,&player);
     
