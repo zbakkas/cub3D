@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/21 15:38:16 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/23 19:48:42 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,21 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     double wall_b;
     double wall_t;
     double sq ;
-    
+
+    player->texture_offset = 0;
     ray_length *= cos(ray_angle - player->angle);
     wall_height =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
     wall_b= ((HEIGHT/2)+(wall_height/2)) +player->yy;
     wall_t= ((HEIGHT/2)-(wall_height/2))+player->yy;
-    if(wall_b> HEIGHT)  
+    if(wall_b> HEIGHT) 
         wall_b =HEIGHT;
     if(wall_t<0)
+    {   
+        int texture_height = player->n_texter->height;
+        player->texture_offset = (-wall_t) / wall_height * texture_height;
         wall_t=0;
+    }
     sq = wall_t;
-
     player->wall_height = wall_height;
     player->wall_t = wall_t;
     player->is_vertical = flag;
@@ -397,7 +401,7 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
     if(keydata.key ==MLX_KEY_LEFT_SHIFT)
     {
         player->is_fire =true;
-        printf("fire\n");
+        // printf("fire\n");
     }
 
 }
@@ -416,13 +420,13 @@ void f_mouse( void *param)
     {
         player->ro= -MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        printf("left\n");
+        // printf("left\n");
     }
     else if( xx-15> WIDTH/2)
     {
         player->ro =MOUSE_SENSITIVE;
         player->angle += player->ro * ROTATE_SPEED;
-        printf("rigth\n");
+        // printf("rigth\n");
     }
     
      if(yy+15<HEIGHT/2 && player->yy <= HEIGHT)
@@ -475,10 +479,10 @@ void game_loop(void *param)
 ///
 
     // mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture->width) /2, (HEIGHT - player->gun_texture->height) );
-    // mlx_delete_image(player->mlx,player->img);
+    mlx_delete_image(player->mlx,player->img);
 
-    // player->img = mlx_new_image(player->mlx, 1500, 1200);
-    // mlx_image_to_window(player->mlx, player->img, 0, 0);
+    player->img = mlx_new_image(player->mlx, 1500, 1200);
+    mlx_image_to_window(player->mlx, player->img, 0, 0);
    /// 
     // printf("11111\n");
     //////////////////////

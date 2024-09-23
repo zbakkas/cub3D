@@ -61,11 +61,11 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	t_int	pos;
 	uint8_t	*pixel_data;
 	t_int	color;
+	int texture_height;
+	int texture_width;
 
 	color = 0;
 	// return(0);
-	int texture_height;
-	int texture_width;
 
 	texture_height = texture->height;
 	texture_width = texture->width;
@@ -76,7 +76,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
 	//calcule y_texture position
 	tmp = (int)(player->pos_y - player->wall_t) * texture->height;
-	y_texture = tmp / player->wall_height;
+	y_texture = tmp / player->wall_height + player->texture_offset;
 	pos = ((int)y_texture * texture->width * texture->bytes_per_pixel) + (int)x_texture * texture->bytes_per_pixel;
 	if (pos < 0 || y_texture < 0 || y_texture >= texture->height
 		|| x_texture < 0 || x_texture >= texture->width || pos >= texture->width * texture->height * texture->bytes_per_pixel)

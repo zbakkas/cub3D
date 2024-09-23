@@ -68,6 +68,7 @@ typedef struct s_player
 	float	y;
 	int 	map_height;
 	int		map_weidth;
+	double  texture_offset;
 	unsigned int	color_sky;
 	unsigned int	color_floor;		
 	double	angle;
