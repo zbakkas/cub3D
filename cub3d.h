@@ -10,13 +10,14 @@
 # include "MLX/include/MLX42/MLX42.h"
 
 #define PI 3.14
-#define V_CH " 10NSEW"
+#define V_CH " 10NSEWD"
 #define P_PLAYER "NSEW"
 #define ERR_CH "Invalid character or you have more than one player"
 #define NOT_EXIST "Map not exist"
 #define MAP_ERR "map is not sourounded or closed"
 #define MAP_V "MAP is not valid"
 #define PY_ERR "ERR dont have Player"
+#define	POS_DOOR "DOOR :: BAD Position"
 
 typedef unsigned int t_int;
 
@@ -73,7 +74,7 @@ typedef struct s_player
 	unsigned int	color_floor;		
 	double	angle;
 	float 	ro;  // In radians
-
+	t_point	*door_p;
 	mlx_image_t* img;
 	mlx_image_t *black;
 	mlx_t *mlx;
@@ -119,13 +120,13 @@ bool	valide_path(char **path);
 bool	check_map_err(t_map *map);
 char	**built2darray(t_map *map);
 void    initialize_inf(t_inf *inf);
-void	back_to_default(char **map);
+void	back_to_default(char **map, char c);
 void	print_information(t_inf inf);
 int		count_exist_line(t_map *map);
 void    take_map(t_map **map, int fd);
 void	valide_arg(char *file, int *fd);
 void	parsing_information(t_inf *inf);
-bool	map_isclosed(char **map, char c);
+bool	map_isclosed(char **map, char c, t_point *point);
 bool	valid_ch(t_map *map, t_inf *inf);
 t_map	*get_position(t_map *map, int idx);
 void	find_start(t_map *map, char	*line);
@@ -134,7 +135,9 @@ t_point	find_empty_space(char **map, char c);
 bool	flood_fill(char **tab, t_point begin);
 bool	catch_color(char *p_color, int *n_color);
 void    take_information(t_map *map, t_inf *inf);
+t_point	*get_position_door(char **map);
 char	*fill_spaces(char	*str, int len, int size);
+bool	valid_door(char	**map, t_point *point);
 bool	check_wall(char **map, t_point begin, t_point size);
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 // all function for recasting

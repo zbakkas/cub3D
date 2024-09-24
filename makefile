@@ -21,7 +21,7 @@ libft:
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(LIB) $(LIBS) $(OBJS) -o $(NAME)
-%.o: %.c
+%.o: %.c $(HAEDER)
 	$(CC) $(CFLAGS) $< -c -o $@
 
 clean:

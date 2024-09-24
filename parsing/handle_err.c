@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:52:22 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/16 19:57:01 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/24 13:26:36 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,13 @@ bool	valid_ch(t_map *map, t_inf *inf)
 	return (true);
 }
 
-bool	map_isclosed(char **map, char c)
+bool	map_isclosed(char **map, char c, t_point *point)
 {
+	int		i;
+	t_point	x;
 	bool	check;
-	t_point x;
 
+	i = 0;
 	x = find_empty_space(map, '0');
 	while (x.x != -1 && x.y != -1)
 	{
@@ -76,8 +78,18 @@ bool	map_isclosed(char **map, char c)
 		x = find_empty_space(map, '0');
 	}
 	x = find_empty_space(map, c);
-	if (x.x != -1 && x.y != -1)
-		check = flood_fill(map, x);
+	if (x.x - 1 < 0 || !map[x.y][x.x + 1] ||  map[x.y][x.x + 1] == 'X'
+			|| map[x.y][x.x - 1] == 'X' || x.y - 1 < 0 || !map[x.y + 1]
+			|| map[x.y + 1][x.x] == 'X' || map[x.y - 1][x.x] == 'X')
+			return (ft_putendl_fd(MAP_ERR, STDERR_FILENO), false);
+	while (point[i].x != -1 && point[i].y != -1)
+	{
+		if (point[i].x - 1 < 0 || !map[point[i].y][point[i].x + 1] || map[point[i].y][point[i].x + 1] == 'X'
+			|| map[point[i].y][point[i].x - 1] == 'X' || point[i].y - 1 < 0 || !map[point[i].y + 1]
+			|| map[point[i].y + 1][point[i].x] == 'X' || map[point[i].y - 1][point[i].x] == 'X')
+			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
+		i++;
+	}
 	return (check);
 }
 

@@ -34,7 +34,7 @@ bool	check_map_err(t_map *map)
 	return (true);
 }
 
-void back_to_default(char **map)
+void back_to_default(char **map, char c)
 {
 	int	i;
 	int	j;
@@ -45,12 +45,63 @@ void back_to_default(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'F' || map[i][j] == 'X')
+			if (map[i][j] == 'F' || map[i][j] == 'X' || map[i][j] == c)
 				map[i][j] = '0';
 			j++;
 		}
 		i++;
 	}
+}
+
+int	count_charcter(char **str, char c)
+{
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		j = 0;
+		while (str[i][j])
+		{
+			if (str[i][j] == c)
+				count++;
+			j++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+t_point	*get_position_door(char **map)
+{
+	int		i;
+	int		j;
+	int		k;
+	t_point	*point;
+
+	k = 0;
+	i = count_charcter(map, 'D');
+	point = (t_point *)malloc(sizeof(t_point) * (i + 1));
+	if (!point)
+		return (NULL);
+	i = -1;
+	while (map[++i])
+	{
+		j = -1;
+		while (map[i][++j])
+		{
+			if (map[i][j] == 'D')
+			{
+				point[k].x = j;
+				point[k++].y = i;
+			}
+		}
+	}
+	point[k].y = -1;
+	return (point[k].x = -1, point);
 }
 
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
@@ -86,5 +137,22 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 		return (0);
 	color = ((pixel_data[0] << 24) | (pixel_data[1] << 16) | (pixel_data[2] << 8) | (pixel_data[3]));
 	return (color);
+}
+
+bool	valid_door(char	**map, t_point *point)
+{
+	int	i;
+
+	i = 0;
+	while (point[i].x != -1 && point[i].y != -1)
+	{
+		if ((map[point[i].y][point[i].x + 1] != '1' || map[point[i].y][point[i].x - 1] != '1')
+			&& (map[point[i].y + 1][point[i].x] != '1' || map[point[i].y - 1][point[i].x] != '1'))
+			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
+		point[i].x *= PEX;
+		point[i].y *= PEX;
+		i++;
+	}
+	return (true);
 }
 

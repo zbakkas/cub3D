@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/16 20:25:11 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/24 13:28:09 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,17 @@ bool	assign_texter(t_player *player, t_inf inf)
 	return (true);
 }
 
-bool	assign_player(t_player *player, char **map, t_inf inf)
+bool	assign_player(t_player *player, char **map, t_inf inf, t_point *point)
 {
 	t_point	p;
 
 	p = find_empty_space(map, inf.position);
 	player->x = p.x * PEX;
 	player->y = p.y * PEX;
-	printf(":::{%f, %f}\n", player->x, player->y);
 	player->color_sky = inf.color_c;
 	player->color_floor = inf.color_f;
 	player->map = map;
+	player->door_p = point;
 	player->map_height = count_arrays(map);
 	player->map_weidth = ft_strlen(map[0]); 
 	player->yy =0;
@@ -65,18 +65,28 @@ bool	assign_player(t_player *player, char **map, t_inf inf)
 		player->angle = (M_PI);
 	else if (inf.position == 'W')
 		player->angle = (0);
-	printf("nourth angle == %.2f\n", (M_PI / 2.0));
-	printf("east angle == %.2f\n", 0.0);
-	printf("south angle == %.2f\n", (3 * M_PI / 2.0));
-	printf("woust angle == %.2f\n", (M_PI));
 	return (true);
 }
 
+void	print_posintion_door(t_point *point)
+{
+	int	i;
+
+	i = 0;
+	printf("------------------------\n");
+	while (point[i].x != -1 && point[i].y != -1)
+	{
+		printf("door[%d]=(%d, %d)\n", i, point[i].x, point[i].y);
+		i++;
+	}
+	printf("------------------------\n");
+}
 void init_all_data(char **av, t_player *player)
 {
 	int		fd;
 	t_inf	inf;
 	t_map	*map;
+	t_point	*point;
 	char	**map_2d;
 
 	map = NULL;
@@ -88,11 +98,12 @@ void init_all_data(char **av, t_player *player)
 	if (!check_errors(&inf) || !valid_ch(map, &inf) || !check_map_err(map))
 		return (free_inf(&inf), free_map(&map), exit(EXIT_FAILURE));
 	print_information(inf);
-	check_map_err(map);
 	map_2d = built2darray(map);
-	if (!assign_player(player, map_2d, inf) || !map_isclosed(map_2d, inf.position))
-		return (print_map(map_2d), free_inf(&inf), free_map(&map), free_arrays(map_2d), exit(EXIT_FAILURE));
-	back_to_default(map_2d);
+	point = get_position_door(map_2d);
+	print_posintion_door(point);
+	if (!map_isclosed(map_2d, inf.position, point) || !valid_door(map_2d, point) || !assign_player(player, map_2d, inf, point))
+		return (free_inf(&inf), free(point), free_map(&map), free_arrays(map_2d), exit(EXIT_FAILURE));
+	back_to_default(map_2d, inf.position);
 	print_map(map_2d);
 	free_inf(&inf);
 	free_map(&map);
