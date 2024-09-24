@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/24 13:28:09 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/24 18:48:50 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ bool	assign_texter(t_player *player, t_inf inf)
 	player->s_texter = mlx_load_png(inf.s_path);
 	player->e_texter = mlx_load_png(inf.e_path);
 	player->w_texter = mlx_load_png(inf.w_path);
-	if (!player->n_texter || !player->s_texter
+	player->door_tex = mlx_load_png("./textures/bluestone.png");
+	if (!player->n_texter || !player->s_texter || !player->door_tex
 		|| !player->e_texter || !player->w_texter)
 		return (ft_putendl_fd("texture not valide", STDERR_FILENO), false);
 	return (true);
 }
 
-bool	assign_player(t_player *player, char **map, t_inf inf, t_point *point)
+bool	assign_player(t_player *player, char **map, t_inf inf, t_door* point)
 {
 	t_point	p;
 
@@ -55,6 +56,7 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_point *point)
 	player->map_height = count_arrays(map);
 	player->map_weidth = ft_strlen(map[0]); 
 	player->yy =0;
+	player->open_door = false;
 	if (!assign_texter(player, inf))
 		return (false);
 	if (inf.position == 'N')
@@ -68,7 +70,7 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_point *point)
 	return (true);
 }
 
-void	print_posintion_door(t_point *point)
+void	print_posintion_door(t_door *point)
 {
 	int	i;
 
@@ -86,7 +88,7 @@ void init_all_data(char **av, t_player *player)
 	int		fd;
 	t_inf	inf;
 	t_map	*map;
-	t_point	*point;
+	t_door	*point;
 	char	**map_2d;
 
 	map = NULL;

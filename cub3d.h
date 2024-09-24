@@ -10,6 +10,8 @@
 # include "MLX/include/MLX42/MLX42.h"
 
 #define PI 3.14
+#define OPEN 79
+#define CLOSE 67
 #define V_CH " 10NSEWD"
 #define P_PLAYER "NSEW"
 #define ERR_CH "Invalid character or you have more than one player"
@@ -26,6 +28,13 @@ typedef struct s_point
 	int	x;
 	int	y;
 }		t_point;
+
+typedef struct s_door
+{
+	int		x;
+	int		y;
+	bool	open_door;
+}		t_door;
 
 typedef struct s_fpoint
 {
@@ -74,7 +83,7 @@ typedef struct s_player
 	unsigned int	color_floor;		
 	double	angle;
 	float 	ro;  // In radians
-	t_point	*door_p;
+	t_door	*door_p;
 	mlx_image_t* img;
 	mlx_image_t *black;
 	mlx_t *mlx;
@@ -89,10 +98,12 @@ typedef struct s_player
 	double	pos_y;
 	double wall_height;
 	int start_mouse;
+	bool	open_door;
 	mlx_texture_t *n_texter;
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
 	mlx_texture_t *w_texter;
+	mlx_texture_t *door_tex;
 	
 	
 	  mlx_texture_t **gun_texture;
@@ -119,6 +130,7 @@ bool	check_errors(t_inf *inf);
 bool	valide_path(char **path);
 bool	check_map_err(t_map *map);
 char	**built2darray(t_map *map);
+int	count_charcter(char **str, char c);
 void    initialize_inf(t_inf *inf);
 void	back_to_default(char **map, char c);
 void	print_information(t_inf inf);
@@ -126,7 +138,7 @@ int		count_exist_line(t_map *map);
 void    take_map(t_map **map, int fd);
 void	valide_arg(char *file, int *fd);
 void	parsing_information(t_inf *inf);
-bool	map_isclosed(char **map, char c, t_point *point);
+bool	map_isclosed(char **map, char c, t_door *point);
 bool	valid_ch(t_map *map, t_inf *inf);
 t_map	*get_position(t_map *map, int idx);
 void	find_start(t_map *map, char	*line);
@@ -135,11 +147,12 @@ t_point	find_empty_space(char **map, char c);
 bool	flood_fill(char **tab, t_point begin);
 bool	catch_color(char *p_color, int *n_color);
 void    take_information(t_map *map, t_inf *inf);
-t_point	*get_position_door(char **map);
+t_door	*get_position_door(char **map);
 char	*fill_spaces(char	*str, int len, int size);
-bool	valid_door(char	**map, t_point *point);
+bool	valid_door(char	**map, t_door *point);
 bool	check_wall(char **map, t_point begin, t_point size);
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
+int	get_coords_door(t_player *player, t_door position);
 // all function for recasting
 
 #define MOVE_SPEED 10

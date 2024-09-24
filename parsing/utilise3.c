@@ -75,16 +75,16 @@ int	count_charcter(char **str, char c)
 	return (count);
 }
 
-t_point	*get_position_door(char **map)
+t_door	*get_position_door(char **map)
 {
 	int		i;
 	int		j;
 	int		k;
-	t_point	*point;
+	t_door	*point;
 
 	k = 0;
 	i = count_charcter(map, 'D');
-	point = (t_point *)malloc(sizeof(t_point) * (i + 1));
+	point = (t_door *)malloc(sizeof(t_door) * (i + 1));
 	if (!point)
 		return (NULL);
 	i = -1;
@@ -96,7 +96,8 @@ t_point	*get_position_door(char **map)
 			if (map[i][j] == 'D')
 			{
 				point[k].x = j;
-				point[k++].y = i;
+				point[k].y = i;
+				point[k].open_door = false;
 			}
 		}
 	}
@@ -139,7 +140,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	return (color);
 }
 
-bool	valid_door(char	**map, t_point *point)
+bool	valid_door(char	**map, t_door *point)
 {
 	int	i;
 
@@ -149,8 +150,6 @@ bool	valid_door(char	**map, t_point *point)
 		if ((map[point[i].y][point[i].x + 1] != '1' || map[point[i].y][point[i].x - 1] != '1')
 			&& (map[point[i].y + 1][point[i].x] != '1' || map[point[i].y - 1][point[i].x] != '1'))
 			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
-		point[i].x *= PEX;
-		point[i].y *= PEX;
 		i++;
 	}
 	return (true);
