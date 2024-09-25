@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/24 18:48:50 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:50:24 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	assign_texter(t_player *player, t_inf inf)
 	return (true);
 }
 
-bool	assign_player(t_player *player, char **map, t_inf inf, t_door* point)
+bool	assign_player(t_player *player, char **map, t_inf inf, t_point* point)
 {
 	t_point	p;
 
@@ -52,7 +52,7 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_door* point)
 	player->color_sky = inf.color_c;
 	player->color_floor = inf.color_f;
 	player->map = map;
-	player->door_p = point;
+	// player->door_p = point;
 	player->map_height = count_arrays(map);
 	player->map_weidth = ft_strlen(map[0]); 
 	player->yy =0;
@@ -70,7 +70,7 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_door* point)
 	return (true);
 }
 
-void	print_posintion_door(t_door *point)
+void	print_posintion_door(t_point *point)
 {
 	int	i;
 
@@ -88,7 +88,7 @@ void init_all_data(char **av, t_player *player)
 	int		fd;
 	t_inf	inf;
 	t_map	*map;
-	t_door	*point;
+	t_point	*point;
 	char	**map_2d;
 
 	map = NULL;

@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:52:22 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/24 18:47:55 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:53:38 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ bool	valid_ch(t_map *map, t_inf *inf)
 	return (true);
 }
 
-bool	map_isclosed(char **map, char c, t_door *point)
+bool	map_isclosed(char **map, char c, t_point *point)
 {
 	int		i;
 	t_point	x;

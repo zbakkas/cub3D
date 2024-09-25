@@ -75,16 +75,16 @@ int	count_charcter(char **str, char c)
 	return (count);
 }
 
-t_door	*get_position_door(char **map)
+t_point	*get_position_door(char **map)
 {
 	int		i;
 	int		j;
 	int		k;
-	t_door	*point;
+	t_point	*point;
 
 	k = 0;
 	i = count_charcter(map, 'D');
-	point = (t_door *)malloc(sizeof(t_door) * (i + 1));
+	point = (t_point *)malloc(sizeof(t_point) * (i + 1));
 	if (!point)
 		return (NULL);
 	i = -1;
@@ -96,13 +96,13 @@ t_door	*get_position_door(char **map)
 			if (map[i][j] == 'D')
 			{
 				point[k].x = j;
-				point[k].y = i;
-				point[k].open_door = false;
+				point[k++].y = i;
 			}
 		}
 	}
+	point[k].x = -1;
 	point[k].y = -1;
-	return (point[k].x = -1, point);
+	return (point);
 }
 
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
@@ -140,7 +140,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	return (color);
 }
 
-bool	valid_door(char	**map, t_door *point)
+bool	valid_door(char	**map, t_point *point)
 {
 	int	i;
 
