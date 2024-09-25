@@ -121,6 +121,7 @@ typedef struct s_intersection {
 } t_intersection;
 
 
+
 //all function for paring
 void	print_map(char **map);
 int		get_max(t_map *map);

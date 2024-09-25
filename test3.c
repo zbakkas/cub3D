@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/24 19:25:44 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:15:56 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void clear_screen(t_player *p)
         x = 0;
         while (x < (int)p->black->width)
         {
+        
             mlx_put_pixel(p->black, x, y, 0x000000FF);
             x++;
         }
@@ -122,9 +123,14 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
             }
         wall_t++;
     }
+    
+    if(wall_b <=0)
+        wall_b =1;
     while (wall_b >0 && wall_b < HEIGHT)
         mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
-    while ( sq>0 && sq< HEIGHT)
+    if(sq >=HEIGHT)
+        sq= HEIGHT-1;
+    while ( (sq>0 && sq< HEIGHT))
     {
         // printf("%f\n",sq);
         mlx_put_pixel(player->img,i,sq--, player->color_sky);
@@ -155,7 +161,7 @@ t_intersection get_h(t_player *player, double ray_angle)
     else    
         ya=-PEX;
     xa = ya/tan(ray_angle);
-    while (int_.x>=0 && int_.x<=WIDTH && int_.y >=0 && int_.y<=HEIGHT)
+    while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
         ////////////////////////door///////////bool
         if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' && !player->open_door)))
@@ -197,7 +203,7 @@ t_intersection get_v(t_player *player ,double ray_angle)
     else
         xa=-PEX;
     ya= xa*tan(ray_angle);
-    while (int_.x>=0 && int_.x<=WIDTH && int_.y >=0 && int_.y<=HEIGHT)
+    while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
               ////////////////////////door///////////bool
         if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' && !player->open_door)))
@@ -351,13 +357,8 @@ void key_mov(t_player * player, float x, float y)
     if(player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] !='1' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='1'
         && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='1')
     {
-        if (player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] != 'D' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='D'
-        && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='D')
-        {
-            player->x = ray_x;
-            player->y = ray_y;
-        }
-        else if (player->open_door)
+        if ((player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] != 'D' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='D'
+        && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='D') ||player->open_door)
         {
             player->x = ray_x;
             player->y = ray_y;
