@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/25 17:50:24 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/27 11:11:26 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ bool	assign_texter(t_player *player, t_inf inf)
 bool	assign_player(t_player *player, char **map, t_inf inf, t_point* point)
 {
 	t_point	p;
-
+	(void)point;
 	p = find_empty_space(map, inf.position);
 	player->x = p.x * PEX;
 	player->y = p.y * PEX;
@@ -56,7 +56,7 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_point* point)
 	player->map_height = count_arrays(map);
 	player->map_weidth = ft_strlen(map[0]); 
 	player->yy =0;
-	player->open_door = false;
+
 	if (!assign_texter(player, inf))
 		return (false);
 	if (inf.position == 'N')

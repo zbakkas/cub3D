@@ -98,7 +98,6 @@ typedef struct s_player
 	double	pos_y;
 	double wall_height;
 	int start_mouse;
-	bool	open_door;
 	mlx_texture_t *n_texter;
 	mlx_texture_t *s_texter;
 	mlx_texture_t *e_texter;
@@ -163,7 +162,7 @@ int	get_coords_door(t_player *player, t_door position);
 #define HEIGHT 1200
 #define WIDTH 1500
 #define NUM_RAYS (WIDTH)
-#define MOUSE_SENSITIVE 0.5
+#define MOUSE_SENSITIVE 0.7
 
 void draw_rays2(t_player *player);
 void init_all_data(char **av, t_player *player);

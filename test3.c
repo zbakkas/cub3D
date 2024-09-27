@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/25 13:15:56 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/27 11:19:30 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ t_intersection get_h(t_player *player, double ray_angle)
     while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
         ////////////////////////door///////////bool
-        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' && !player->open_door)))
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D')))
         {
             int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
             break;   
@@ -206,7 +206,7 @@ t_intersection get_v(t_player *player ,double ray_angle)
     while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
               ////////////////////////door///////////bool
-        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' && !player->open_door)))
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' )))
         {
             int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
             break;
@@ -281,6 +281,10 @@ void mini_map(t_player *player)
                 mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFFFFFFFF);
             }
             else if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< player->map_height && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='D')
+            {
+                mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFF0000FF);
+            }
+             else if((start_x/(PEX/2)) >=0 && (start_y/(PEX/2))>=0 && (start_y/(PEX/2))< player->map_height && (start_x/(PEX/2)) < (int)strlen(player->map[(int)(start_y/(PEX/2))]) &&player->map[(int)(start_y/(PEX/2))][(int)(start_x/(PEX/2))]=='d')
             {
                 mlx_put_pixel(player->img,start_x-(x-h),start_y-(y-v),0xFFFFFFF);
             }
@@ -358,12 +362,38 @@ void key_mov(t_player * player, float x, float y)
         && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='1')
     {
         if ((player->map[(int)(player->y/PEX)][(int)(ray_x/PEX)] != 'D' && player->map[(int)(ray_y/PEX)][(int)(player->x/PEX)] !='D'
-        && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='D') ||player->open_door)
+        && player->map[(int)(ray_y/PEX)][(int)(ray_x/PEX)] !='D') )
         {
             player->x = ray_x;
             player->y = ray_y;
         }
     }
+}
+int check_door(t_player *player, int distance)
+{
+    int i =1;
+    double x=0;
+    double y=0;
+    while (i<= distance)
+    {
+        x =player->x + cos(normal_ang(player->angle))*i;
+        y = player->y + sin(normal_ang(player->angle))*i;
+
+        if(player->map[(int)(y/PEX)][(int)(x/PEX)]=='D' && player->map[(int)(player->y/PEX)][(int)(player->x/PEX)]!='D')
+        {
+            player->map[(int)(y/PEX)][(int)(x/PEX)]='d';
+            return 1;
+        }
+        else if(player->map[(int)(y/PEX)][(int)(x/PEX)]=='d'&& player->map[(int)(player->y/PEX)][(int)(player->x/PEX)]!='d')
+        {
+            player->map[(int)(y/PEX)][(int)(x/PEX)]='D';
+            return 2;
+        }
+        
+        i++;
+    }
+    
+    return 0;
 }
 
 void my_keyhook(mlx_key_data_t keydata, void* param)
@@ -372,10 +402,12 @@ void my_keyhook(mlx_key_data_t keydata, void* param)
     float x ;
     float y ;
 
-    if (keydata.key == CLOSE)
-        player->open_door = false;
-    else if (keydata.key == OPEN)
-        player->open_door = true;
+    if (keydata.key == MLX_KEY_O && keydata.action)
+    {
+        check_door(player,40);
+    }
+
+   
     if (keydata.key == MLX_KEY_W  && keydata.action)  // Move forward
     {
         x =(cos(player->angle) * MOVE_SPEED);
@@ -458,11 +490,11 @@ void f_mouse( void *param)
     
      if(yy+15<HEIGHT/2 && player->yy <= HEIGHT)
     {
-        player->yy+=20;
+        player->yy+=30;
     }
     else if(yy-15>HEIGHT/2 && player->yy >= -HEIGHT)
     {
-        player->yy-=20;
+        player->yy-=30;
     }
     
     mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
