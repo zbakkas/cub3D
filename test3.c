@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/27 11:19:30 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/27 13:40:54 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,16 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     while (wall_t< wall_b)
     {
         player->pos_y = wall_t;
-        
+       
         if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='D')
         {
             t_int color = load_colors(player, player->door_tex, (t_fpoint){intersection.x, intersection.y});
+            mlx_put_pixel(player->img,i,wall_t, color);
+        }
+        else if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='d')
+        {
+            // printf("ggggg\n");
+            t_int color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
             mlx_put_pixel(player->img,i,wall_t, color);
         }
         else if(flag) //vertical
@@ -120,7 +126,7 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
                   t_int color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
                 mlx_put_pixel(player->img,i,wall_t, color); // up
             }
-            }
+        }
         wall_t++;
     }
     
@@ -164,7 +170,7 @@ t_intersection get_h(t_player *player, double ray_angle)
     while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
         ////////////////////////door///////////bool
-        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D')))
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D')|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='d')))
         {
             int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
             break;   
@@ -206,7 +212,7 @@ t_intersection get_v(t_player *player ,double ray_angle)
     while ((int)(int_.x/PEX) >=0 && (int)(int_.x/PEX) <= player->map_weidth && (int)(int_.y/PEX) >=0 && (int)(int_.y/PEX)<=player->map_height)
     {
               ////////////////////////door///////////bool
-        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' )))
+        if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='d'))))
         {
             int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
             break;

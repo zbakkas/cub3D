@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/27 11:11:26 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/27 13:31:47 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ bool	assign_texter(t_player *player, t_inf inf)
 	player->s_texter = mlx_load_png(inf.s_path);
 	player->e_texter = mlx_load_png(inf.e_path);
 	player->w_texter = mlx_load_png(inf.w_path);
-	player->door_tex = mlx_load_png("./textures/bluestone.png");
+	player->door_tex = mlx_load_png("./textures/wall/door01.png");
+	player->door_open_tex = mlx_load_png("./textures/wall/door_open01.png");
 	if (!player->n_texter || !player->s_texter || !player->door_tex
 		|| !player->e_texter || !player->w_texter)
 		return (ft_putendl_fd("texture not valide", STDERR_FILENO), false);
