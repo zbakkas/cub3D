@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 17:40:41 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:41:13 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	door_is_s(t_point **p, char **map)
 			|| map[point[i].y][point[i].x - 1] == 'X' || point[i].y - 1 < 0
 			|| !map[point[i].y + 1] || map[point[i].y + 1][point[i].x] == 'X'
 			|| map[point[i].y - 1][point[i].x] == 'X')
-			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
+			return (false);
 		i++;
 	}
 	free(*p);
@@ -86,15 +86,17 @@ void	free_textures(t_player *player)
 	int	i;
 
 	i = 0;
+	free_content_tex(player);
+	if (!player->gun_texture)
+		return ;
 	while (i < 7)
 	{
-		if (player->gun_texture[i])
+		if (player->gun_texture && player->gun_texture[i])
 			free(player->gun_texture[i]->pixels);
 		free(player->gun_texture[i]);
 		i++;
 	}
 	free(player->gun_texture);
-	free_content_tex(player);
 }
 
 bool	valid_door(char **map, t_point *point)
@@ -104,10 +106,10 @@ bool	valid_door(char **map, t_point *point)
 	i = 0;
 	while (point[i].x != -1 && point[i].y != -1)
 	{
-		if ((map[point[i].y][point[i].x + 1] != '1'
-			|| map[point[i].y][point[i].x - 1] != '1')
-			&& (map[point[i].y + 1][point[i].x] != '1'
-			|| map[point[i].y - 1][point[i].x] != '1'))
+		if ((!map[point[i].y][point[i].x + 1] || map[point[i].y][point[i].x + 1] != '1'
+			|| point[i].x - 1 < 0  || map[point[i].y][point[i].x - 1] != '1')
+			&& (!map[point[i].y + 1] || map[point[i].y + 1][point[i].x] != '1'
+			|| point[i].y - 1 < 0 || map[point[i].y - 1][point[i].x] != '1'))
 			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
 		i++;
 	}
