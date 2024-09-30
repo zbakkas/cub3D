@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 15:44:12 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:54:43 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_all_data(char **av, t_player *player)
 	if (!map_isclosed(map_2d, inf.position, point) || !valid_door(map_2d, point)
 		|| !assign_player(player, map_2d, inf))
 		return (free_inf(&inf), free(point), free_map(&map),
-			free_arrays(map_2d), free_gun(player->gun_texture)
+			free_arrays(map_2d), free_textures(player)
 			, exit(EXIT_FAILURE));
 	back_to_default(map_2d, inf.position);
 	return (free_inf(&inf), free_map(&map));
@@ -56,7 +56,7 @@ int	main(int ac, char **av)
 	{
 		init_all_data(av, &player);
 		free_arrays(player.map);
-		free_gun(player.gun_texture);
+		free_textures(&player);
 		printf("------everything is okey------\n");
 	}
 	else

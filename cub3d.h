@@ -155,7 +155,7 @@ bool	check_wall(char **map, t_point begin, t_point size);
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 void	draw_gun(t_player *player, mlx_texture_t *texture);
 bool    door_is_s(t_point *point, char  **map);
-void	free_gun(mlx_texture_t **gun_tex);
+void	free_textures(t_player *player);
 bool	assign_player(t_player *player, char **map, t_inf inf);
 
 //all function for recasting

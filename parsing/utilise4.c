@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 14:47:16 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:53:03 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,22 @@ void	draw_gun(t_player *player, mlx_texture_t *texture)
 	}
 }
 
-void	free_gun(mlx_texture_t **gun_tex)
+void	free_textures(t_player *player)
 {
 	int	i;
 
 	i = 0;
 	while (i < 7)
 	{
-		free(gun_tex[i]);
+		free(player->gun_texture[i]);
 		i++;
 	}
+	free(player->n_texter);
+	free(player->s_texter);
+	free(player->e_texter);
+	free(player->w_texter);
+	free(player->door_tex);
+	free(player->door_open_tex);
 }
 
 bool	valid_door(char **map, t_point *point)
