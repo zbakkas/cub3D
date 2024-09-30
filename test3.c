@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 11:38:50 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:13:52 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,12 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     double wall_height;
     double wall_b;
     double wall_t;
-    double sq ;
+    double sq;
+    bool    check;
+    t_int   color;
+    double  tmp;
 
+    check = false;
     player->texture_offset = 0;
     ray_length *= cos(ray_angle - player->angle);
     wall_height =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
@@ -77,8 +81,9 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         wall_b =HEIGHT;
     if(wall_t<0)
     {   
-        int texture_height = player->n_texter->height;
-        player->texture_offset = (-wall_t) / wall_height * texture_height;
+        check = true;
+        // int texture_height = player->n_texter->height;
+        tmp = (-wall_t) / wall_height;
         wall_t=0;
     }
     sq = wall_t;
@@ -87,51 +92,52 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     player->is_vertical = flag;
     while (wall_t< wall_b)
     {
+        
         player->pos_y = wall_t;
-       
         if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='D')
         {
-            t_int color = load_colors(player, player->door_tex, (t_fpoint){intersection.x, intersection.y});
-            mlx_put_pixel(player->img,i,wall_t, color);
+            if (check)
+                player->texture_offset = tmp * player->door_tex->height;
+            color = load_colors(player, player->door_tex, (t_fpoint){intersection.x, intersection.y});
         }
         else if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='d')
         {
-            // printf("ggggg\n");
-            t_int color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
-            if (color != 0)
-                mlx_put_pixel(player->img,i,wall_t, color);
+            if (check)
+            player->texture_offset = tmp * player->door_open_tex->height;
+            color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
         }
         else if(flag) //vertical
         {
             if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
             {
-                t_int color = load_colors(player, player->w_texter, (t_fpoint){intersection.x, intersection.y});
-                if (color != 0)
-				mlx_put_pixel(player->img,i,wall_t, color);
+                if (check)
+                    player->texture_offset = tmp * player->w_texter->height;
+                color = load_colors(player, player->w_texter, (t_fpoint){intersection.x, intersection.y});
             }
             if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
                 || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
             {
-                t_int color = load_colors(player, player->e_texter, (t_fpoint){intersection.x, intersection.y});
-				if (color != 0)
-                mlx_put_pixel(player->img,i,wall_t, color);
+                if (check)
+                    player->texture_offset = tmp * player->e_texter->height;
+                color = load_colors(player, player->e_texter, (t_fpoint){intersection.x, intersection.y});
             }
         }
         else    
         {
             if (ray_angle > M_PI && ray_angle < 2 * M_PI)// down
             {
-                t_int color = load_colors(player, player->s_texter, (t_fpoint){intersection.x, intersection.y});
-                if (color != 0)
-                mlx_put_pixel(player->img,i,wall_t, color); 
+                if (check)
+                    player->texture_offset = tmp * player->n_texter->height;
+                color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
             }
-            else// up
+            else // up
             {
-                t_int color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
-                if (color != 0)
-                mlx_put_pixel(player->img,i,wall_t, color); // up
+                if (check)
+                    player->texture_offset = tmp * player->s_texter->height;
+                color = load_colors(player, player->s_texter, (t_fpoint){intersection.x, intersection.y});
             }
         }
+        mlx_put_pixel(player->img,i,wall_t, color);
         wall_t++;
     }
     if(wall_b <=0)
