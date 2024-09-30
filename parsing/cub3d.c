@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 19:32:03 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/30 20:52:27 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_all_data(char **av, t_player *player)
 	char	**map_2d;
 
 	map = NULL;
+	init_texutres(player);
 	initialize_inf(&inf);
 	valide_arg(av[1], &fd);
 	take_map(&map, fd);
@@ -55,7 +56,7 @@ void ll()
 // 		init_texutres(&player);
 // 		init_all_data(av, &player);
 // 		free_arrays(player.map);
-// 		free_textures(&player);
+		// free_textures(&player);
 // 		printf("------everything is okey------\n");
 // 	}
 // 	else

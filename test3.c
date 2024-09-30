@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 19:31:49 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/30 20:52:37 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -763,21 +763,6 @@ int main(int arc, char **arv)
 
     
 ////////////////////////////////////////
-   
-
-    player.gun_texture =malloc(10*sizeof(mlx_texture_t));
-    
-    player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
-    player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
-    player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
-    player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
-    player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
-    player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
-    player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
-    player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
-    player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
-    player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
-    player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
 	
     /////
     player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);

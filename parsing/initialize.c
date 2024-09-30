@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 13:23:05 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 18:10:17 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:51:39 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,9 @@ bool	assign_texter(t_player *player, t_inf inf)
 	player->w_texter = mlx_load_png(inf.w_path);
 	player->door_tex = mlx_load_png("./textures/wall/door01.png");
 	player->door_open_tex = mlx_load_png("./textures/wall/wall_open02.png");
-	player->gun_texture = malloc(sizeof(mlx_texture_t *) * 8);
-	if (!player->gun_texture)
-		return (false);
-	player->gun_texture[0] = mlx_load_png("./textures/GUN/shoo0.png");
-	player->gun_texture[1] = mlx_load_png("./textures/GUN/shoo1.png");
-	player->gun_texture[2] = mlx_load_png("./textures/GUN/shoo2.png");
-	player->gun_texture[3] = mlx_load_png("./textures/GUN/shoo3.png");
-	player->gun_texture[4] = mlx_load_png("./textures/GUN/shoo4.png");
-	player->gun_texture[5] = mlx_load_png("./textures/GUN/shoo5.png");
-	player->gun_texture[6] = mlx_load_png("./textures/GUN/shoo6.png");
-	player->gun_texture[7] = NULL;
-	if (!player->n_texter || !player->s_texter || !player->door_tex
-		|| !player->gun_texture[0] || !player->gun_texture[2]
-		|| !player->e_texter || !player->w_texter || !player->door_open_tex
-		|| !player->gun_texture[1] || !player->gun_texture[3]
-		|| !player->gun_texture[4] || !player->gun_texture[5]
-		|| !player->gun_texture[6])
+	if (!init_gun_tex(player) || !player->n_texter || !player->s_texter
+		|| !player->door_tex || !player->e_texter || !player->w_texter
+		|| !player->door_open_tex)
 		return (ft_putendl_fd("texture not valide", STDERR_FILENO), false);
 	return (true);
 }

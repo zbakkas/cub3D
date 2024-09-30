@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:11:15 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 19:28:01 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:36:57 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	atoi_(char *str)
 
 	i = 0;
 	result = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
 	if (str && (str[i] == '-' || str[i] == '+'))
 	{
 		if (str[i] == '-')
@@ -83,12 +85,14 @@ int	atoi_(char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result = result * 10 + (str[i] - '0');
-		// printf("%lld\n", result);
 		if (result < 0 || result > 255)
 			return (-1);
 		i++;
 	}
-	// printf("%lld\n", result);
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
+	if (str[i])
+		return (-1);
 	return (result);
 }
 

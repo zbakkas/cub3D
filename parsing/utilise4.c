@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 18:41:13 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:54:09 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	free_textures(t_player *player)
 	free_content_tex(player);
 	if (!player->gun_texture)
 		return ;
-	while (i < 7)
+	while (i < 11)
 	{
 		if (player->gun_texture && player->gun_texture[i])
 			free(player->gun_texture[i]->pixels);

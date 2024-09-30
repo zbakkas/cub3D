@@ -158,6 +158,7 @@ bool	door_is_s(t_point **p, char **map);
 void	free_textures(t_player *player);
 void	init_texutres(t_player *player);
 void    free_content_tex(t_player *player);
+bool	init_gun_tex(t_player *player);
 bool	assign_player(t_player *player, char **map, t_inf inf);
 
 //all function for recasting
