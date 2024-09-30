@@ -139,7 +139,7 @@ int		count_exist_line(t_map *map);
 void    take_map(t_map **map, int fd);
 void	valide_arg(char *file, int *fd);
 void	parsing_information(t_inf *inf);
-bool	map_isclosed(char **map, char c, t_point *point);
+bool	map_isclosed(char **map, char c, t_point **point);
 bool	valid_ch(t_map *map, t_inf *inf);
 t_map	*get_position(t_map *map, int idx);
 void	find_start(t_map *map, char	*line);
@@ -154,7 +154,7 @@ bool	valid_door(char	**map, t_point *point);
 bool	check_wall(char **map, t_point begin, t_point size);
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 void	draw_gun(t_player *player, mlx_texture_t *texture);
-bool    door_is_s(t_point *point, char  **map);
+bool	door_is_s(t_point **p, char **map);
 void	free_textures(t_player *player);
 bool	assign_player(t_player *player, char **map, t_inf inf);
 
