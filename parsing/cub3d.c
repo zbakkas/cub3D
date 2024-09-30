@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 17:04:41 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:14:40 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ void	init_all_data(char **av, t_player *player)
 // free_arrays(map_2d);
 // free gun_textures
 
-// void ll()
-// {
-// 	system("leaks -q cub3D");
-// }
+void ll()
+{
+	system("leaks -q cub3D");
+}
 
 int	main(int ac, char **av)
 {
 	t_player	player;
 
-	// atexit(ll);
+	atexit(ll);
 	if (ac == 2)
 	{
 		init_all_data(av, &player);
