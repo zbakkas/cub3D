@@ -6,15 +6,15 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:44:49 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/19 11:03:06 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:25:32 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void    take_map(t_map **map, int fd)
+void	take_map(t_map **map, int fd)
 {
-	char    *line;
+	char	*line;
 
 	line = get_next_line(fd);
 	while (line)
@@ -27,10 +27,10 @@ void    take_map(t_map **map, int fd)
 	close(fd);
 }
 
-void    take_information(t_map *map, t_inf *inf)
+void	take_information(t_map *map, t_inf *inf)
 {
-	int 	i;
-	
+	int	i;
+
 	i = count_exist_line(map);
 	if (i < 6)
 		return (inf->inf_map = NULL, free(NULL));
@@ -49,7 +49,7 @@ void    take_information(t_map *map, t_inf *inf)
 
 void	parsing_information(t_inf *inf)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (!inf->inf_map)
@@ -72,7 +72,7 @@ void	parsing_information(t_inf *inf)
 	}
 }
 
-bool	color_is_valid(char	**color, int **color_)
+bool	color_is_valid(char **color, int **color_)
 {
 	int		i;
 	int		j;
@@ -91,16 +91,17 @@ bool	color_is_valid(char	**color, int **color_)
 	n_color.r = ft_atoi(color[0]);
 	n_color.g = ft_atoi(color[1]);
 	n_color.b = ft_atoi(color[2]);
-	if (n_color.r > 255 || n_color.r < 0 || n_color.g > 255
-		|| n_color.g < 0 || n_color.b > 255 || n_color.b < 0)
+	if (n_color.r > 255 || n_color.r < 0 || n_color.g > 255 || n_color.g < 0
+		|| n_color.b > 255 || n_color.b < 0)
 		return (false);
 	**color_ = (n_color.r << 24 | n_color.g << 16 | n_color.b << 8 | 255);
 	return (true);
 }
+
 bool	catch_color(char *p_color, int *n_color)
 {
 	int		end;
-	int 	start;
+	int		start;
 	char	*color;
 	char	**rgb_color;
 
@@ -113,7 +114,7 @@ bool	catch_color(char *p_color, int *n_color)
 		return (free(color), false);
 	rgb_color = ft_split(color, ',');
 	if (count_arrays(rgb_color) != 3)
-		return(free_arrays(rgb_color), free(color), false);
+		return (free_arrays(rgb_color), free(color), false);
 	if (!color_is_valid(rgb_color, &n_color))
 		return (free_arrays(rgb_color), free(color), false);
 	return (free_arrays(rgb_color), free(color), true);

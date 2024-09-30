@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   utilise2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 16:59:24 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/16 19:57:11 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:01:51 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-bool	fill(char **tab, t_point size, t_point begin, char old, char new)
+bool	fill(char **tab, t_point size, t_point begin, char old)
 {
+	char	new;
+
+	new = 'F';
 	if (begin.x >= size.x || begin.y >= size.y || begin.x < 0 || begin.y < 0)
 	{
 		ft_putendl_fd(MAP_ERR, STDERR_FILENO);
@@ -28,25 +31,26 @@ bool	fill(char **tab, t_point size, t_point begin, char old, char new)
 		tab[begin.y][begin.x] = new;
 	else
 		return (true);
-	if (!fill(tab, size, (t_point){begin.x + 1, begin.y}, old, new)
-		|| !fill(tab, size, (t_point){begin.x - 1, begin.y}, old, new)
-		|| !fill(tab, size, (t_point){begin.x, begin.y + 1}, old, new)
-		|| !fill(tab, size, (t_point){begin.x, begin.y - 1}, old, new))
+	if (!fill(tab, size, (t_point){begin.x + 1, begin.y}, old)
+		|| !fill(tab, size, (t_point){begin.x - 1, begin.y}, old)
+		|| !fill(tab, size, (t_point){begin.x, begin.y + 1}, old)
+		|| !fill(tab, size, (t_point){begin.x, begin.y - 1}, old))
 		return (false);
 	return (true);
 }
 
 bool	flood_fill(char **tab, t_point begin)
 {
-	bool check;
+	bool	check;
 
 	if (!tab || !tab[0])
 		return (false);
-	check = fill(tab, (t_point){ft_strlen(tab[0]), count_arrays(tab)}, begin, tab[begin.y][begin.x], 'F');
-	return check;
+	check = fill(tab, (t_point){ft_strlen(tab[0]), count_arrays(tab)}, begin,
+			tab[begin.y][begin.x]);
+	return (check);
 }
 
-char	*fill_spaces(char	*str, int len, int max)
+char	*fill_spaces(char *str, int len, int max)
 {
 	int		i;
 	int		j;
@@ -108,7 +112,7 @@ t_point	find_empty_space(char **map, char c)
 			{
 				cord.x = j;
 				cord.y = i;
-				return cord;
+				return (cord);
 			}
 			j++;
 		}

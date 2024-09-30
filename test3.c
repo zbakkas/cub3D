@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 13:13:52 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:38:07 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -589,7 +589,7 @@ void game_loop(void *param)
 if(player->is_fire)
     {
         // player->gun_image = mlx_new_image(player->mlx, 1500, 1200);
-       draw_gnu(player, player->gun_texture[player->i_fire]);
+       draw_gun(player, player->gun_texture[player->i_fire]);
         if(player->i_time >1 )
         {
          player->i_fire++;
@@ -605,78 +605,77 @@ if(player->is_fire)
     }
     else
     {
-       draw_gnu(player, player->gun_texture[0]);
+       draw_gun(player, player->gun_texture[0]);
     }
    
     
 }
 
-int main(int arc, char **arv)
-{
+// int main(int arc, char **arv)
+// {
     
-    t_player	player;
-    	player.yy =0;
-        player.i_fire =0;
-        player.i_time =0;
-	player.space =false;
-	player.time_space = 12;
-	player.player_down =true;
-	player.player_up =false;
-    player.start_mouse =15;
+//     t_player	player;
+//     	player.yy =0;
+//         player.i_fire =0;
+//         player.i_time =0;
+// 	player.space =false;
+// 	player.time_space = 12;
+// 	player.player_down =true;
+// 	player.player_up =false;
+//     player.start_mouse =15;
 
-	if (arc == 2)
-		init_all_data(arv, &player);
-	else
-    {
-		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-        exit(0);
-    }
-    player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
-    player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-    // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-    player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+// 	if (arc == 2)
+// 		init_all_data(arv, &player);
+// 	else
+//     {
+// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
+//         exit(0);
+//     }
+//     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
+//     player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
-    // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
     
-////////////////////////////////////////
+// ////////////////////////////////////////
    
 
-    player.gun_texture =malloc(10*sizeof(mlx_texture_t));
+//     player.gun_texture =malloc(10*sizeof(mlx_texture_t));
     
-    player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
-    player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
-    player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
-    player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
-    player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
-    player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
-    player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
-    player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
-    player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
-    player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
-    player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
+//     player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
+//     player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
+//     player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
+//     player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
+//     player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
+//     player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
+//     player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
+//     player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
+//     player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
+//     player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
+//     player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
 	
-    /////
-    player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     /////
+//     player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
 
     
-    mlx_image_to_window(player.mlx, player.black, 0, 0);
-    mlx_image_to_window(player.mlx, player.img, 0, 0);
+//     mlx_image_to_window(player.mlx, player.black, 0, 0);
+//     mlx_image_to_window(player.mlx, player.img, 0, 0);
 
     
     
-    // mlx_image_to_window(player.mlx, player.img, 0, 0);
-    // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+//     // mlx_image_to_window(player.mlx, player.img, 0, 0);
+//     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
+//     mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
-    mlx_loop_hook(player.mlx,game_loop,&player);
+//     mlx_loop_hook(player.mlx,game_loop,&player);
     
     
-    // mlx_scroll_hook(player.mlx,&f_mouse,&player);
+//     // mlx_scroll_hook(player.mlx,&f_mouse,&player);
     
-    mlx_loop(player.mlx);
+//     mlx_loop(player.mlx);
 
-    return 0;
-}
-
+//     return 0;
+// }

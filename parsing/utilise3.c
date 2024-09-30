@@ -1,4 +1,4 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utilise3.c                                         :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:29:06 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/19 09:46:19 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:51:20 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	check_map_err(t_map *map)
 	return (true);
 }
 
-void back_to_default(char **map, char c)
+void	back_to_default(char **map, char c)
 {
 	int	i;
 	int	j;
@@ -83,8 +83,7 @@ t_point	*get_position_door(char **map)
 	t_point	*point;
 
 	k = 0;
-	i = count_charcter(map, 'D');
-	point = (t_point *)malloc(sizeof(t_point) * (i + 1));
+	point = (t_point *)malloc(sizeof(t_point) * (count_charcter(map, 'D') + 1));
 	if (!point)
 		return (NULL);
 	i = -1;
@@ -107,51 +106,29 @@ t_point	*get_position_door(char **map)
 
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 {
-	t_int x_texture;
-	t_int y_texture;
 	double	tmp;
 	t_int	pos;
-	uint8_t	*pixel_data;
 	t_int	color;
-	int texture_height;
-	int texture_width;
+	t_point	p_tex;
+	uint8_t	*pixel_data;
 
 	color = 0;
-	// return(0);
-
-	texture_height = texture->height;
-	texture_width = texture->width;
-	//calcule x_texture position
 	if (!player->is_vertical)
-		x_texture = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
+		p_tex.x = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
 	else
-		x_texture = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
-	//calcule y_texture position
+		p_tex.x = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
 	tmp = (int)(player->pos_y - player->wall_t) * texture->height;
-	y_texture = tmp / player->wall_height + player->texture_offset;
-	pos = ((int)y_texture * texture->width * texture->bytes_per_pixel) + (int)x_texture * texture->bytes_per_pixel;
-	if (pos < 0 || y_texture < 0 || y_texture >= texture->height
-		|| x_texture < 0 || x_texture >= texture->width || pos >= texture->width * texture->height * texture->bytes_per_pixel)
-        return 0;
+	p_tex.y = tmp / player->wall_height + player->texture_offset;
+	pos = ((int)p_tex.y * texture->width * texture->bytes_per_pixel)
+		+ (int)p_tex.x * texture->bytes_per_pixel;
+	if (pos < 0 || p_tex.y < 0 || (uint32_t)p_tex.y >= texture->height
+		|| p_tex.x < 0 || (uint32_t)p_tex.x >= texture->width
+		|| pos >= (texture->width * texture->height * texture->bytes_per_pixel))
+		return (0);
 	pixel_data = &(texture->pixels[pos]);
 	if (!pixel_data)
 		return (0);
-	color = ((pixel_data[0] << 24) | (pixel_data[1] << 16) | (pixel_data[2] << 8) | (pixel_data[3]));
+	color = ((pixel_data[0] << 24) | (pixel_data[1] << 16)
+			| (pixel_data[2] << 8) | (pixel_data[3]));
 	return (color);
 }
-
-bool	valid_door(char	**map, t_point *point)
-{
-	int	i;
-
-	i = 0;
-	while (point[i].x != -1 && point[i].y != -1)
-	{
-		if ((map[point[i].y][point[i].x + 1] != '1' || map[point[i].y][point[i].x - 1] != '1')
-			&& (map[point[i].y + 1][point[i].x] != '1' || map[point[i].y - 1][point[i].x] != '1'))
-			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
-		i++;
-	}
-	return (true);
-}
-

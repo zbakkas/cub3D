@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilice.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:45:08 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/16 19:57:06 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/30 13:57:48 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 void	valide_arg(char *file, int *fd)
 {
-	char    *str;
+	char	*str;
 
 	str = ft_strrchr(file, '.');
 	if (ft_strcmp(str, ".cub") != 0)
 	{
-		ft_putendl_fd("Invalide extention use \"file_name.cub\"", STDERR_FILENO);
+		ft_putendl_fd("Invalide extention use \"file_name.cub\"",
+			STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	*fd = open(file, O_RDONLY , 0644);
+	*fd = open(file, O_RDONLY, 0644);
 	if (*fd < 0)
 	{
 		perror(file);
@@ -55,7 +56,7 @@ void	creat_list(t_map **map, char *line)
 	new_row->prev = ptr;
 }
 
-void	find_start(t_map *map, char	*line)
+void	find_start(t_map *map, char *line)
 {
 	int	i;
 
@@ -69,7 +70,7 @@ void	find_start(t_map *map, char	*line)
 	map->s_x = i;
 }
 
-void	free_inf(t_inf	*inf)
+void	free_inf(t_inf *inf)
 {
 	free(inf->s_path);
 	free(inf->n_path);
@@ -98,4 +99,3 @@ bool	valide_path(char **path)
 	free_arrays(tmp);
 	return (true);
 }
-
