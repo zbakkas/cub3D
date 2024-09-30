@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/28 13:12:56 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:33:58 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	assign_texter(t_player *player, t_inf inf)
 	player->e_texter = mlx_load_png(inf.e_path);
 	player->w_texter = mlx_load_png(inf.w_path);
 	player->door_tex = mlx_load_png("./textures/wall/door01.png");
-	player->door_open_tex = mlx_load_png("./textures/wall/door_open01.png");
+	player->door_open_tex = mlx_load_png("./textures/wall/wall_open02.png");
 	player->gun_texture = malloc(sizeof(mlx_texture_t *) * 8);
 	player->gun_texture[0] = mlx_load_png("./textures/GUN/shoo0.png");
 	player->gun_texture[1] = mlx_load_png("./textures/GUN/shoo1.png");
@@ -57,8 +57,8 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_point* point)
 	t_point	p;
 	(void)point;
 	p = find_empty_space(map, inf.position);
-	player->x = p.x * PEX;
-	player->y = p.y * PEX;
+	player->x = (p.x * PEX) + 16;
+	player->y = (p.y * PEX) + 16;
 	player->color_sky = inf.color_c;
 	player->color_floor = inf.color_f;
 	player->map = map;
@@ -69,14 +69,14 @@ bool	assign_player(t_player *player, char **map, t_inf inf, t_point* point)
 
 	if (!assign_texter(player, inf))
 		return (false);
-	if (inf.position == 'N')
+	if (inf.position == 'S')
 		player->angle = (M_PI / 2.0);
-	else if (inf.position == 'S')
+	else if (inf.position == 'N')
 		player->angle = (3 * M_PI / 2.0);
 	else if (inf.position == 'E')
-		player->angle = (M_PI);
-	else if (inf.position == 'W')
 		player->angle = (0);
+	else if (inf.position == 'W')
+		player->angle = (M_PI);
 	return (true);
 }
 

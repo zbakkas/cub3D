@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 10:40:40 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:38:50 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,20 +98,23 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         {
             // printf("ggggg\n");
             t_int color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
-            mlx_put_pixel(player->img,i,wall_t, color);
+            if (color != 0)
+                mlx_put_pixel(player->img,i,wall_t, color);
         }
         else if(flag) //vertical
         {
             if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
             {
                 t_int color = load_colors(player, player->w_texter, (t_fpoint){intersection.x, intersection.y});
+                if (color != 0)
 				mlx_put_pixel(player->img,i,wall_t, color);
             }
             if ((ray_angle > 3 * M_PI / 2.0 && ray_angle < 2 * M_PI)
                 || (ray_angle > 0 && ray_angle < M_PI / 2.0)) // right
             {
                 t_int color = load_colors(player, player->e_texter, (t_fpoint){intersection.x, intersection.y});
-				mlx_put_pixel(player->img,i,wall_t, color);
+				if (color != 0)
+                mlx_put_pixel(player->img,i,wall_t, color);
             }
         }
         else    
@@ -119,11 +122,13 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
             if (ray_angle > M_PI && ray_angle < 2 * M_PI)// down
             {
                 t_int color = load_colors(player, player->s_texter, (t_fpoint){intersection.x, intersection.y});
+                if (color != 0)
                 mlx_put_pixel(player->img,i,wall_t, color); 
             }
             else// up
             {
-                  t_int color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
+                t_int color = load_colors(player, player->n_texter, (t_fpoint){intersection.x, intersection.y});
+                if (color != 0)
                 mlx_put_pixel(player->img,i,wall_t, color); // up
             }
         }
@@ -551,30 +556,8 @@ void game_loop(void *param)
    /// 
     // printf("11111\n");
     //////////////////////
-    mlx_delete_image(player->mlx,player->gun_image);
-    if(player->is_fire)
-    {
-        // player->gun_image = mlx_new_image(player->mlx, 1500, 1200);
-        player->gun_image= mlx_texture_to_image(player->mlx,player->gun_texture[player->i_fire]);
-        mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture[player->i_fire]->width) /2 , (HEIGHT - player->gun_texture[player->i_fire]->height) );
-        if(player->i_time >1 )
-        {
-         player->i_fire++;
-            player->i_time=0;
-        }
-         
-        if(player->i_fire ==11)
-        {
-            player->i_fire =0;
-            player->is_fire =false;
-        }
-        player->i_time++;
-    }
-    else
-    {
-        player->gun_image= mlx_texture_to_image(player->mlx,player->gun_texture[0]);
-        mlx_image_to_window(player->mlx, player->gun_image, (WIDTH - player->gun_texture[0]->width) /2 , (HEIGHT - player->gun_texture[0]->height) );
-    }
+  
+    
         
 
    
@@ -595,9 +578,29 @@ void game_loop(void *param)
         mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
     player->ro =0 ;
 
-    draw_gnu(player, player->gun_texture[0]);
+    
 
-
+if(player->is_fire)
+    {
+        // player->gun_image = mlx_new_image(player->mlx, 1500, 1200);
+       draw_gnu(player, player->gun_texture[player->i_fire]);
+        if(player->i_time >1 )
+        {
+         player->i_fire++;
+            player->i_time=0;
+        }
+         
+        if(player->i_fire ==11)
+        {
+            player->i_fire =0;
+            player->is_fire =false;
+        }
+        player->i_time++;
+    }
+    else
+    {
+       draw_gnu(player, player->gun_texture[0]);
+    }
    
     
 }
