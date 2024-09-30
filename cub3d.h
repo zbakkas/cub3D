@@ -153,8 +153,7 @@ char	*fill_spaces(char	*str, int len, int size);
 bool	valid_door(char	**map, t_point *point);
 bool	check_wall(char **map, t_point begin, t_point size);
 t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
-int	get_coords_door(t_player *player, t_door position);
-// all function for recasting
+void draw_gnu(t_player *player, mlx_texture_t *texture);
 
 #define MOVE_SPEED 10
 #define ROTATE_SPEED 10 * (M_PI/180) //0.01745329252 =>> 0.1745329252

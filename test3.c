@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/27 13:40:54 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/30 10:40:40 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         }
         wall_t++;
     }
-    
     if(wall_b <=0)
         wall_b =1;
     while (wall_b >0 && wall_b < HEIGHT)
@@ -141,6 +140,7 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         // printf("%f\n",sq);
         mlx_put_pixel(player->img,i,sq--, player->color_sky);
     }
+    // draw_gnu(player, player->gun_texture[0]);
 }
 t_intersection get_h(t_player *player, double ray_angle)
 {
@@ -595,7 +595,7 @@ void game_loop(void *param)
         mlx_set_mouse_pos(player->mlx,WIDTH/2,HEIGHT/2);
     player->ro =0 ;
 
-
+    draw_gnu(player, player->gun_texture[0]);
 
 
    
@@ -623,7 +623,7 @@ int main(int arc, char **arv)
         exit(0);
     }
     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
-
+    player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
     player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 

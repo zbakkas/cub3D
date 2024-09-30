@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/27 13:31:47 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/09/28 13:12:56 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,17 @@ bool	assign_texter(t_player *player, t_inf inf)
 	player->w_texter = mlx_load_png(inf.w_path);
 	player->door_tex = mlx_load_png("./textures/wall/door01.png");
 	player->door_open_tex = mlx_load_png("./textures/wall/door_open01.png");
+	player->gun_texture = malloc(sizeof(mlx_texture_t *) * 8);
+	player->gun_texture[0] = mlx_load_png("./textures/GUN/shoo0.png");
+	player->gun_texture[1] = mlx_load_png("./textures/GUN/shoo1.png");
+	player->gun_texture[2] = mlx_load_png("./textures/GUN/shoo2.png");
+	player->gun_texture[3] = mlx_load_png("./textures/GUN/shoo3.png");
+	player->gun_texture[4] = mlx_load_png("./textures/GUN/shoo4.png");
+	player->gun_texture[5] = mlx_load_png("./textures/GUN/shoo5.png");
+	player->gun_texture[6] = mlx_load_png("./textures/GUN/shoo6.png");
+	player->gun_texture[7] = NULL;
 	if (!player->n_texter || !player->s_texter || !player->door_tex
-		|| !player->e_texter || !player->w_texter)
+		|| !player->e_texter || !player->w_texter || !player->door_open_tex)
 		return (ft_putendl_fd("texture not valide", STDERR_FILENO), false);
 	return (true);
 }
