@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 18:43:21 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:32:03 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,19 @@ void ll()
 	system("leaks -q cub3D");
 }
 
-int	main(int ac, char **av)
-{
-	t_player	player;
+// int	main(int ac, char **av)
+// {
+// 	t_player	player;
 
-	// atexit(ll);
-	if (ac == 2)
-	{
-		init_texutres(&player);
-		init_all_data(av, &player);
-		free_arrays(player.map);
-		free_textures(&player);
-		printf("------everything is okey------\n");
-	}
-	else
-		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-}
+// 	// atexit(ll);
+// 	if (ac == 2)
+// 	{
+// 		init_texutres(&player);
+// 		init_all_data(av, &player);
+// 		free_arrays(player.map);
+// 		free_textures(&player);
+// 		printf("------everything is okey------\n");
+// 	}
+// 	else
+// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
+// }

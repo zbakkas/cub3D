@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 15:38:07 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:31:49 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,15 @@ void clear_screen(t_player *p)
         y++;
     }
 }
-
-void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int flag,t_intersection intersection)
+void render_door(t_player  *player,int i,double ray_angle,int flag,t_intersection intersection)
 {
-    double wall_height;
+     double wall_height;
     double wall_b;
     double wall_t;
+
+
+
+
     double sq;
     bool    check;
     t_int   color;
@@ -73,8 +76,8 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
 
     check = false;
     player->texture_offset = 0;
-    ray_length *= cos(ray_angle - player->angle);
-    wall_height =(PEX/ray_length)*(WIDTH/2)/tan(FOV/2);
+    intersection.distance *= cos(ray_angle - player->angle);
+    wall_height =(PEX/intersection.distance)*(WIDTH/2)/tan(FOV/2);
     wall_b= ((HEIGHT/2)+(wall_height/2)) +player->yy;
     wall_t= ((HEIGHT/2)-(wall_height/2))+player->yy;
     if(wall_b> HEIGHT) 
@@ -90,24 +93,102 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
     player->wall_height = wall_height;
     player->wall_t = wall_t;
     player->is_vertical = flag;
+
+
+
+
+
+    /////////////
     while (wall_t< wall_b)
     {
         
         player->pos_y = wall_t;
-        if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='D')
+        if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='d')
+        {
+            if (check)
+                player->texture_offset = tmp * player->door_open_tex->height;
+            color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
+            if(color)
+                mlx_put_pixel(player->img,i,wall_t, color);
+                
+        }
+        
+    
+    
+        wall_t++;
+    }
+  
+    
+    
+    // if(wall_b <=0)
+    //     wall_b =1;
+    // while (wall_b >0 && wall_b < HEIGHT)
+    //     mlx_put_pixel(player->img,i,wall_b++,player->color_floor);
+    // if(sq >=HEIGHT)
+    //     sq= HEIGHT-1;
+    // while ( (sq>0 && sq< HEIGHT))
+    // {
+    //     // printf("%f\n",sq);
+    //     mlx_put_pixel(player->img,i,sq--, player->color_sky);
+    // }
+
+
+}
+
+void render_wall(t_player  *player,int i,double ray_angle,int flag,t_intersection intersection)
+{
+    double wall_height;
+    double wall_b;
+    double wall_t;
+
+
+
+
+    double sq;
+    bool    check;
+    t_int   color;
+    double  tmp;
+
+    check = false;
+    player->texture_offset = 0;
+    intersection.distance *= cos(ray_angle - player->angle);
+    wall_height =(PEX/intersection.distance)*(WIDTH/2)/tan(FOV/2);
+    wall_b= ((HEIGHT/2)+(wall_height/2)) +player->yy;
+    wall_t= ((HEIGHT/2)-(wall_height/2))+player->yy;
+    if(wall_b> HEIGHT) 
+        wall_b =HEIGHT;
+    if(wall_t<0)
+    {   
+        check = true;
+        // int texture_height = player->n_texter->height;
+        tmp = (-wall_t) / wall_height;
+        wall_t=0;
+    }
+    sq = wall_t;
+    player->wall_height = wall_height;
+    player->wall_t = wall_t;
+    player->is_vertical = flag;
+
+
+
+
+
+    /////////////
+    while (wall_t< wall_b)
+    {
+        
+        player->pos_y = wall_t;
+
+         if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='D')
         {
             if (check)
                 player->texture_offset = tmp * player->door_tex->height;
             color = load_colors(player, player->door_tex, (t_fpoint){intersection.x, intersection.y});
-        }
-        else if(player->map[(int)(intersection.y/PEX)][(int)(intersection.x/PEX)]=='d')
-        {
-            if (check)
-            player->texture_offset = tmp * player->door_open_tex->height;
-            color = load_colors(player, player->door_open_tex, (t_fpoint){intersection.x, intersection.y});
+            mlx_put_pixel(player->img,i,wall_t, color);
         }
         else if(flag) //vertical
         {
+            
             if (ray_angle > M_PI / 2.0 && ray_angle < 3 * M_PI / 1) // left
             {
                 if (check)
@@ -137,9 +218,14 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
                 color = load_colors(player, player->s_texter, (t_fpoint){intersection.x, intersection.y});
             }
         }
+    
         mlx_put_pixel(player->img,i,wall_t, color);
+    
         wall_t++;
     }
+  
+    
+    
     if(wall_b <=0)
         wall_b =1;
     while (wall_b >0 && wall_b < HEIGHT)
@@ -151,9 +237,11 @@ void render_wall(t_player  *player, double ray_length,int i,double ray_angle,int
         // printf("%f\n",sq);
         mlx_put_pixel(player->img,i,sq--, player->color_sky);
     }
-    // draw_gnu(player, player->gun_texture[0]);
+
+
+   
 }
-t_intersection get_h(t_player *player, double ray_angle)
+t_intersection get_h(t_player *player, double ray_angle, bool is_door)
 {
     t_intersection int_;
     double first_y;
@@ -183,8 +271,18 @@ t_intersection get_h(t_player *player, double ray_angle)
         ////////////////////////door///////////bool
         if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D')|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='d')))
         {
-            int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
-            break;   
+            if(player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)] =='d' && is_door)
+            {
+                int_.x+=xa;
+                int_.y+=ya;
+            }
+            else
+            {
+                int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
+                
+                break;   
+            }
+            
         }
         else
         {
@@ -195,7 +293,7 @@ t_intersection get_h(t_player *player, double ray_angle)
     return int_;
 }
 
-t_intersection get_v(t_player *player ,double ray_angle)
+t_intersection get_v(t_player *player ,double ray_angle , bool is_door)
 {
     t_intersection int_;
     double first_x;
@@ -225,8 +323,18 @@ t_intersection get_v(t_player *player ,double ray_angle)
               ////////////////////////door///////////bool
         if((int)(int_.y/PEX) < player->map_height &&((int)(int_.x/PEX)) < (int)strlen(player->map[(int)(int_.y/PEX)]) && (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='1'|| (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='D' || (player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)]=='d'))))
         {
-            int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
-            break;
+            if(player->map[(int)(int_.y/PEX)][(int)(int_.x/PEX)] == 'd'&& is_door)
+            {
+                int_.x+=xa;
+                int_.y+=ya;
+            }
+            else
+            {
+                int_.distance = (sqrt(pow(int_.x - player->x, 2) + pow(int_.y - player->y, 2)));
+                break;
+                
+            }
+            
         }
         else
         {
@@ -252,20 +360,35 @@ void draw_rays2(t_player *player)
         ray_angle = normal_ang(ray_angle);
 
         /////H//////////////
-        distance_h = get_h(player,ray_angle);
+        distance_h = get_h(player,ray_angle,1);
    
         /////////////-V-//////////////
-        distance_v =get_v(player,ray_angle);
+        distance_v =get_v(player,ray_angle,1);
 
         //////////
         if(distance_v.distance <  distance_h.distance)
         {
-            render_wall(player,distance_v.distance,i,ray_angle,1,distance_v);
+            render_wall(player,i,ray_angle,1,distance_v);
         }
         else
         {
-            render_wall(player,distance_h.distance,i,ray_angle,0,distance_h);
+            render_wall(player,i,ray_angle,0,distance_h);
         }
+         /////H//////////////
+        distance_h = get_h(player,ray_angle,0);
+   
+        /////////////-V-//////////////
+        distance_v =get_v(player,ray_angle,0);
+
+        if(distance_v.distance <  distance_h.distance)
+        {
+            render_door(player,i,ray_angle,1,distance_v);
+        }
+        else
+        {
+            render_door(player,i,ray_angle,0,distance_h);
+        }
+        
         //////////////wall 3D
         // if((next_h_x>=0 && next_h_x<=WIDTH && next_h_y >=0 && next_h_y<=HEIGHT)||(next_v_x>=0 && next_v_x<=WIDTH && next_v_y >=0 && next_v_y<=HEIGHT))
         //////////
@@ -611,71 +734,72 @@ if(player->is_fire)
     
 }
 
-// int main(int arc, char **arv)
-// {
+int main(int arc, char **arv)
+{
     
-//     t_player	player;
-//     	player.yy =0;
-//         player.i_fire =0;
-//         player.i_time =0;
-// 	player.space =false;
-// 	player.time_space = 12;
-// 	player.player_down =true;
-// 	player.player_up =false;
-//     player.start_mouse =15;
+    t_player	player;
+    	player.yy =0;
+        player.i_fire =0;
+        player.i_time =0;
+	player.space =false;
+	player.time_space = 12;
+	player.player_down =true;
+	player.player_up =false;
+    player.start_mouse =15;
 
-// 	if (arc == 2)
-// 		init_all_data(arv, &player);
-// 	else
-//     {
-// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-//         exit(0);
-//     }
-//     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
-//     player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-//     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-//     player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+	if (arc == 2)
+		init_all_data(arv, &player);
+	else
+    {
+		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
+        exit(0);
+    }
+    player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
+    player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
-//     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
     
-// ////////////////////////////////////////
+////////////////////////////////////////
    
 
-//     player.gun_texture =malloc(10*sizeof(mlx_texture_t));
+    player.gun_texture =malloc(10*sizeof(mlx_texture_t));
     
-//     player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
-//     player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
-//     player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
-//     player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
-//     player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
-//     player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
-//     player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
-//     player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
-//     player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
-//     player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
-//     player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
+    player.gun_texture[0] = mlx_load_png("textures/GUN/shoo0.png");
+    player.gun_texture[1] = mlx_load_png("textures/GUN/shoo5.png");
+    player.gun_texture[2] = mlx_load_png("textures/GUN/shoo6.png");
+    player.gun_texture[3] = mlx_load_png("textures/GUN/shoo4.png");
+    player.gun_texture[4] = mlx_load_png("textures/GUN/shoo3.png");
+    player.gun_texture[5] = mlx_load_png("textures/GUN/shoo2.png");
+    player.gun_texture[6] = mlx_load_png("textures/GUN/shoo1.png");
+    player.gun_texture[7] = mlx_load_png("textures/GUN/shoo1.png");
+    player.gun_texture[8] = mlx_load_png("textures/GUN/shoo2.png");
+    player.gun_texture[9] = mlx_load_png("textures/GUN/shoo3.png");
+    player.gun_texture[10] = mlx_load_png("textures/GUN/shoo4.png");
 	
-//     /////
-//     player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+    /////
+    player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
 
     
-//     mlx_image_to_window(player.mlx, player.black, 0, 0);
-//     mlx_image_to_window(player.mlx, player.img, 0, 0);
+    mlx_image_to_window(player.mlx, player.black, 0, 0);
+    mlx_image_to_window(player.mlx, player.img, 0, 0);
 
     
     
-//     // mlx_image_to_window(player.mlx, player.img, 0, 0);
-//     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-//     mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+    // mlx_image_to_window(player.mlx, player.img, 0, 0);
+    // mlx_image_to_window(player.mlx, player.ray, 0, 0);
+    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
-//     mlx_loop_hook(player.mlx,game_loop,&player);
+    mlx_loop_hook(player.mlx,game_loop,&player);
     
     
-//     // mlx_scroll_hook(player.mlx,&f_mouse,&player);
+    // mlx_scroll_hook(player.mlx,&f_mouse,&player);
     
-//     mlx_loop(player.mlx);
+    mlx_loop(player.mlx);
 
-//     return 0;
-// }
+    return 0;
+}
+
