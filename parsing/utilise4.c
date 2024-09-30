@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 17:16:19 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:40:41 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,15 @@ void	free_textures(t_player *player)
 	int	i;
 
 	i = 0;
-	printf("freeing textures\n");
 	while (i < 7)
 	{
-		free(player->gun_texture[i]->pixels);
+		if (player->gun_texture[i])
+			free(player->gun_texture[i]->pixels);
 		free(player->gun_texture[i]);
 		i++;
 	}
 	free(player->gun_texture);
-	free(player->n_texter->pixels);
-	free(player->n_texter);
-	free(player->s_texter->pixels);
-	free(player->s_texter);
-	free(player->e_texter->pixels);
-	free(player->e_texter);
-	free(player->w_texter->pixels);
-	free(player->w_texter);
-	free(player->door_tex->pixels);
-	free(player->door_tex);
-	free(player->door_open_tex->pixels);
-	free(player->door_open_tex);
+	free_content_tex(player);
 }
 
 bool	valid_door(char **map, t_point *point)

@@ -156,6 +156,7 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x);
 void	draw_gun(t_player *player, mlx_texture_t *texture);
 bool	door_is_s(t_point **p, char **map);
 void	free_textures(t_player *player);
+void    free_content_tex(t_player *player);
 bool	assign_player(t_player *player, char **map, t_inf inf);
 
 //all function for recasting
