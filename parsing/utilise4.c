@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 15:53:03 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:56:27 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	free_textures(t_player *player)
 		free(player->gun_texture[i]);
 		i++;
 	}
+	free(player->gun_texture);
 	free(player->n_texter);
 	free(player->s_texter);
 	free(player->e_texter);
