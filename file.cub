@@ -5,7 +5,7 @@ WE ./textures/wall/wall__.png
 EA ./textures/wall/wall_.png
 
 C 47,52,50
-F 17,71, 95
+F 17,71, 4294967295
 
         1111111111111111111111111
         10000000001D00000000000N1

@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 14:29:42 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/08/25 09:52:01 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:06:46 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_va
 	int	nb_words;
 }		t_va;
 
+int		count_ch(char *str, char c);
 bool	is_space(char c);
 bool	check_ch(char c, char *delim);
 void	*ft_memset(void *s, int c, size_t n);
@@ -46,7 +47,7 @@ size_t	ft_strlen(const char *str);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size_dest);
 char	*ft_strnstr(const char *str, const char *find, size_t n);
 int		ft_atoi(const char *str);
-int		atoi_(char *str, int *flag);
+int		atoi_(char *str);
 int		ft_isalnum(int c);
 int		ft_isdigit(int c);
 int		ft_strcmp(char *s1, char *s2);

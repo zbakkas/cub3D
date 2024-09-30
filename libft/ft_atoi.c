@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:11:15 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/08/23 15:51:46 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:28:01 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,33 +65,31 @@ int	ft_atoi(const char *str)
 	return (re * signe);
 }
 
-int	atoi_(char *str, int *flag)
+#include <stdio.h>
+
+int	atoi_(char *str)
 {
 	int			i;
-	int			sign;
 	long long	result;
 
 	i = 0;
-	sign = 1;
 	result = 0;
 	if (str && (str[i] == '-' || str[i] == '+'))
 	{
 		if (str[i] == '-')
-			sign *= -1;
+			return (-1);
 		i++;
 	}
-	if (!str || !(str[i] >= '0' && str[i] <= '9'))
-		*flag = 1;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result = result * 10 + (str[i] - '0');
-		if (check(result, (str[i] - '0')))
-			*flag = 1;
+		// printf("%lld\n", result);
+		if (result < 0 || result > 255)
+			return (-1);
 		i++;
 	}
-	if (str[i] != '\0')
-		*flag = 1;
-	return (result * sign);
+	// printf("%lld\n", result);
+	return (result);
 }
 
 int	count_arrays(char **str)
