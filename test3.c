@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/09/30 20:52:37 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/01 10:18:24 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -734,57 +734,57 @@ if(player->is_fire)
     
 }
 
-int main(int arc, char **arv)
-{
+// int main(int arc, char **arv)
+// {
     
-    t_player	player;
-    	player.yy =0;
-        player.i_fire =0;
-        player.i_time =0;
-	player.space =false;
-	player.time_space = 12;
-	player.player_down =true;
-	player.player_up =false;
-    player.start_mouse =15;
+//     t_player	player;
+//     	player.yy =0;
+//         player.i_fire =0;
+//         player.i_time =0;
+// 	player.space =false;
+// 	player.time_space = 12;
+// 	player.player_down =true;
+// 	player.player_up =false;
+//     player.start_mouse =15;
 
-	if (arc == 2)
-		init_all_data(arv, &player);
-	else
-    {
-		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-        exit(0);
-    }
-    player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
-    player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-    // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
-    player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+// 	if (arc == 2)
+// 		init_all_data(arv, &player);
+// 	else
+//     {
+// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
+//         exit(0);
+//     }
+//     player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
+//     player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     // player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     player.black = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
-    // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     // player.ray = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
     
-////////////////////////////////////////
+// ////////////////////////////////////////
 	
-    /////
-    player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
+//     /////
+//     player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 
 
     
-    mlx_image_to_window(player.mlx, player.black, 0, 0);
-    mlx_image_to_window(player.mlx, player.img, 0, 0);
+//     mlx_image_to_window(player.mlx, player.black, 0, 0);
+//     mlx_image_to_window(player.mlx, player.img, 0, 0);
 
     
     
-    // mlx_image_to_window(player.mlx, player.img, 0, 0);
-    // mlx_image_to_window(player.mlx, player.ray, 0, 0);
-    mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
+//     // mlx_image_to_window(player.mlx, player.img, 0, 0);
+//     // mlx_image_to_window(player.mlx, player.ray, 0, 0);
+//     mlx_set_cursor_mode(player.mlx,MLX_MOUSE_HIDDEN);
    
-    mlx_loop_hook(player.mlx,game_loop,&player);
+//     mlx_loop_hook(player.mlx,game_loop,&player);
     
     
-    // mlx_scroll_hook(player.mlx,&f_mouse,&player);
+//     // mlx_scroll_hook(player.mlx,&f_mouse,&player);
     
-    mlx_loop(player.mlx);
+//     mlx_loop(player.mlx);
 
-    return 0;
-}
+//     return 0;
+// }
 
