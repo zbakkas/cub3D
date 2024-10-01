@@ -82,10 +82,8 @@ typedef struct s_player
 	unsigned int	color_sky;
 	unsigned int	color_floor;		
 	double	angle;
-	float 	ro;  // In radians
 	t_door	*door_p;
 	mlx_image_t* img;
-	mlx_image_t *black;
 	mlx_t *mlx;
 	int yy;
 	bool space;
@@ -171,7 +169,18 @@ bool	assign_player(t_player *player, char **map, t_inf inf);
 #define WIDTH 1500
 #define NUM_RAYS (WIDTH)
 #define MOUSE_SENSITIVE 0.7
+#define RO 1
 
-void draw_rays2(t_player *player);
 void init_all_data(char **av, t_player *player);
+
+void mini_map(t_player *player);
+float normal_ang(double angle);
+t_intersection get_h(t_player *player, double ray_angle, bool is_door);
+t_intersection get_v(t_player *player ,double ray_angle , bool is_door);
+int check_door(t_player *player, int distance);
+void render_door(t_player  *player,int i,double ray_angle,int flag,t_intersection intersection);
+void my_keyhook(mlx_key_data_t keydata, void* param);
+void f_mouse( void *param);
+void fire_(t_player *player);
+void render_wall(t_player  *player,int i,double ray_angle,int flag,t_intersection intersection);
 #endif

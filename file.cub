@@ -1,11 +1,11 @@
 SO ./textures/wall/wall0.png
-NO ./textures/git_tex/wall_4.png
+NO ./textures/wall/wall_torch01.png
 
 WE ./textures/wall/wall__.png
 EA ./textures/wall/wall_.png
 
-C       4,52,25     
-F 17,71, 255
+C 47,52,50   
+F 17,7, 2
 
         1111111111111111111111111
         10000000001D00000000000N1
