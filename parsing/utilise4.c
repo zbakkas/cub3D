@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:43:32 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 20:54:09 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/01 10:50:01 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	door_is_s(t_point **p, char **map)
 {
 	int		i;
-	t_point *point;
+	t_point	*point;
 
 	i = 0;
 	point = *p;
@@ -106,8 +106,9 @@ bool	valid_door(char **map, t_point *point)
 	i = 0;
 	while (point[i].x != -1 && point[i].y != -1)
 	{
-		if ((!map[point[i].y][point[i].x + 1] || map[point[i].y][point[i].x + 1] != '1'
-			|| point[i].x - 1 < 0  || map[point[i].y][point[i].x - 1] != '1')
+		if ((!map[point[i].y][point[i].x + 1]
+			|| map[point[i].y][point[i].x + 1] != '1'
+			|| point[i].x - 1 < 0 || map[point[i].y][point[i].x - 1] != '1')
 			&& (!map[point[i].y + 1] || map[point[i].y + 1][point[i].x] != '1'
 			|| point[i].y - 1 < 0 || map[point[i].y - 1][point[i].x] != '1'))
 			return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
