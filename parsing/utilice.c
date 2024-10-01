@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:45:08 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 13:57:48 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/01 10:38:12 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ bool	valide_path(char **path)
 	if (count != 2)
 	{
 		ft_putendl_fd("Invalid format", STDERR_FILENO);
-		return (false);
+		return (free_arrays(tmp), false);
 	}
 	free(*path);
 	*path = ft_strdup(tmp[1]);
