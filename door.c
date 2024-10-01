@@ -6,7 +6,7 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:27:45 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/01 18:10:19 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/01 21:12:35 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,31 @@ typedef struct s_arg_door
 	t_int	color;
 	double	tmp;
 }t_arg_door;
+
+void	draw_player(t_player *player, int v, int h)
+{
+	int		ii;
+	double	an_x;
+	double	an_y;
+
+	ii = 0;
+	mlx_put_pixel(player->img, h, v, 0xFF0000FF);
+	mlx_put_pixel(player->img, h + 1, v, 0xFF0000FF);
+	mlx_put_pixel(player->img, h - 1, v, 0xFF0000FF);
+	mlx_put_pixel(player->img, h, v + 1, 0xFF0000FF);
+	mlx_put_pixel(player->img, h, v - 1, 0xFF0000FF);
+	mlx_put_pixel(player->img, h + 1, v + 1, 0xFF0000FF);
+	mlx_put_pixel(player->img, h - 1, v - 1, 0xFF0000FF);
+	mlx_put_pixel(player->img, h + 1, v - 1, 0xFF0000FF);
+	mlx_put_pixel(player->img, h - 1, v + 1, 0xFF0000FF);
+	while (ii < 10)
+	{
+		an_x = h + (cos(normal_ang(player->angle)) * ii);
+		an_y = v + (sin(normal_ang(player->angle)) * ii);
+		mlx_put_pixel(player->img, an_x, an_y, 0xFF0000FF);
+		ii++;
+	}
+}
 
 void	render_door_tow(t_player *player, t_arg_door	arg,
 t_intersection intersection, int i)

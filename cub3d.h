@@ -183,4 +183,5 @@ void my_keyhook(mlx_key_data_t keydata, void* param);
 void f_mouse( void *param);
 void fire_(t_player *player);
 void render_wall(t_player  *player,int i,double ray_angle,int flag,t_intersection intersection);
+void	draw_player(t_player *player, int v, int h);
 #endif
