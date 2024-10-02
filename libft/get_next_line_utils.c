@@ -6,11 +6,11 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 00:34:40 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/08/15 18:30:33 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:15:44 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 int	check_line(char *str)
 {

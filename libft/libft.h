@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 14:29:42 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 19:06:46 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:14:04 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,21 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 void	free_arrays(char **str);
 char	**new_split(char *str);
 int		hexa_to_int(char *str);
+
+//get_nex_line
+
+# include <fcntl.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
+char	*read_management(int fd, char **temp, char *buffer);
+char	*get_next_line(int fd);
+int		strlen_(char *str);
+char	*strjoin(char *str, char *str1);
+char	*update(char *str);
+char	*last_word(char *str);
+int		check_line(char *str);
 
 #endif

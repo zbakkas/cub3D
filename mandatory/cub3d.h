@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:33:50 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 18:39:27 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:17:37 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define CUB3D_H
 
 # include "../MLX/include/MLX42/MLX42.h"
-# include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 # include <fcntl.h>
 # include <math.h>
@@ -22,8 +21,6 @@
 # include <stdlib.h>
 
 # define PI 3.14
-# define OPEN 79
-# define CLOSE 67
 # define V_CH " 10NSEW"
 # define P_PLAYER "NSEW"
 # define ERR_CH "Invalid character or you have more than one player"

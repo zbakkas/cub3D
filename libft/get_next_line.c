@@ -6,11 +6,11 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 00:39:56 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/07/10 12:00:59 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:15:50 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 char	*get_str(char **temp)
 {
