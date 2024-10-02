@@ -3,10 +3,10 @@ RM = rm -f
 NAME = cub3D
 HAEDER = cub3d.h
 CFLAGS = -Wall -Wextra -Werror -Ofast -funroll-loops -O3 -march=native -g #-fsanitize=address
-SRC = ./parsing/cub3d.c ./parsing/utilise2.c ./parsing/initialize.c ./parsing/utilice.c ./parsing/check_map.c \
-	./parsing/handle_err.c ./parsing/utilise4.c ./parsing/utilise5.c\
-	./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c ./parsing/utilice1.c ./parsing/utilise3.c\
-	./raycasting/mainn.c ./raycasting/mini_map.c ./raycasting/intersection.c ./raycasting/door.c ./raycasting/keys.c ./raycasting/wall.c\
+SRC = ./bonus/parsing/cub3d.c ./bonus/parsing/utilise2.c ./bonus/parsing/initialize.c ./bonus/parsing/utilice.c ./bonus/parsing/check_map.c \
+	./bonus/parsing/handle_err.c ./bonus/parsing/utilise4.c ./bonus/parsing/utilise5.c\
+	./bonus/get_next_line/get_next_line.c ./bonus/get_next_line/get_next_line_utils.c ./bonus/parsing/utilice1.c ./bonus/parsing/utilise3.c\
+	./bonus/raycasting/mainn.c ./bonus/raycasting/mini_map.c ./bonus/raycasting/intersection.c ./bonus/raycasting/door.c ./bonus/raycasting/keys.c ./bonus/raycasting/wall.c\
 
 OBJS = $(SRC:.c=.o)
 LIBS = -L./libft -lft
