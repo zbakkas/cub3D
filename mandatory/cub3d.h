@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:33:50 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 15:52:39 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:39:27 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define PI 3.14
 # define OPEN 79
 # define CLOSE 67
-# define V_CH " 10NSEWD"
+# define V_CH " 10NSEW"
 # define P_PLAYER "NSEW"
 # define ERR_CH "Invalid character or you have more than one player"
 # define NOT_EXIST "Map not exist"

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wall.c                                             :+:      :+:    :+:   */
+/*   wall_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:29:29 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 12:37:13 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:31:15 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3d_bonus.h"
 
 static void	init_args(t_arg_w *args, t_player *player, t_inst *p)
 {

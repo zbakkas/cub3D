@@ -1,14 +1,23 @@
 CC = cc
 RM = rm -f
 NAME = cub3D
+NAME_BONUS = cub3d_bonus
 HAEDER = cub3d.h
-CFLAGS = -Wall -Wextra -Werror -Ofast -funroll-loops -O3 -march=native -g #-fsanitize=address
-SRC = ./bonus/parsing/cub3d.c ./bonus/parsing/utilise2.c ./bonus/parsing/initialize.c ./bonus/parsing/utilice.c ./bonus/parsing/check_map.c \
-	./bonus/parsing/handle_err.c ./bonus/parsing/utilise4.c ./bonus/parsing/utilise5.c\
-	./bonus/get_next_line/get_next_line.c ./bonus/get_next_line/get_next_line_utils.c ./bonus/parsing/utilice1.c ./bonus/parsing/utilise3.c\
-	./bonus/raycasting/mainn.c ./bonus/raycasting/mini_map.c ./bonus/raycasting/intersection.c ./bonus/raycasting/door.c ./bonus/raycasting/keys.c ./bonus/raycasting/wall.c\
+HAEDER_BONUS = cub3d_bonus.h
+CFLAGS = -Wall -Wextra -Werror
+SRC = ./mandatory/parsing/cub3d.c ./mandatory/parsing/utilise2.c ./mandatory/parsing/initialize.c ./mandatory/parsing/utilice.c ./mandatory/parsing/check_map.c \
+	./mandatory/parsing/handle_err.c ./mandatory/parsing/utilise4.c ./mandatory/parsing/utilise5.c ./mandatory/parsing/utilice1.c ./mandatory/parsing/utilise3.c\
+	./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c \
+	./mandatory/raycasting/mainn.c ./mandatory/raycasting/intersection.c ./mandatory/raycasting/keys.c ./mandatory/raycasting/wall.c\
+
+SRC_BONUS = ./bonus/parsing/cub3d_bonus.c ./bonus/parsing/utilise2_bonus.c ./bonus/parsing/initialize_bonus.c ./bonus/parsing/utilice_bonus.c ./bonus/parsing/check_map_bonus.c \
+	./bonus/parsing/handle_err_bonus.c ./bonus/parsing/utilise4_bonus.c ./bonus/parsing/utilise5_bonus.c\
+	../get_next_line/get_next_line.c ../get_next_line/get_next_line_utils.c ./bonus/parsing/utilice1_bonus.c ./bonus/parsing/utilise3_bonus.c\
+	./bonus/raycasting/mainn_bonus.c ./bonus/raycasting/mini_map_bonus.c ./bonus/raycasting/intersection_bonus.c ./bonus/raycasting/door_bonus.c ./bonus/raycasting/keys_bonus.c ./bonus/raycasting/wall_bonus.c\
 
 OBJS = $(SRC:.c=.o)
+OBJS_BONUS = $(SRC_BONUS:.c=.o)
+
 LIBS = -L./libft -lft
 
 LIB = MLX/build/libglfw3.a MLX/build/libmlx42.a  -framework Cocoa -framework OpenGL -framework IOKit
@@ -24,14 +33,23 @@ $(NAME): $(OBJS)
 %.o: %.c $(HAEDER)
 	$(CC) $(CFLAGS) $< -c -o $@
 
+bonus: libft $(NAME_BONUS)
+
+$(NAME_BONUS): $(OBJS_BONUS)
+	@$(CC) $(CFLAGS) $(LIB) $(LIBS) $(OBJS_BONUS) -o $(NAME_BONUS)
+%.o: %.c $(HAEDER)
+	$(CC) $(CFLAGS) $< -c -o $@
+
 clean:
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(OBJS_BONUS)
 	@make clean -C ./libft
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(NAME_BONUS)
 	@make fclean -C ./libft
 
 re: fclean all
+
+re_bonus: fclean bonus
 
 .PHONY: libft

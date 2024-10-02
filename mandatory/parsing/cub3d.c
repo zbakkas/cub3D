@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/01 10:50:59 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:40:22 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	init_all_data(char **av, t_player *player)
 		return (free_inf(&inf), free_map(&map), exit(EXIT_FAILURE));
 	map_2d = built2darray(map);
 	point = get_position_door(map_2d);
-	if ((!valid_door(map_2d, point))
-		|| !map_isclosed(map_2d, inf.position, &point)
+	if (!map_isclosed(map_2d, inf.position, &point)
 		|| !assign_player(player, map_2d, inf))
 		return (free_inf(&inf), free(point), free_map(&map),
 			free_arrays(map_2d), free_textures(player)
@@ -40,20 +39,3 @@ void	init_all_data(char **av, t_player *player)
 	back_to_default(map_2d, inf.position);
 	return (free_inf(&inf), free_map(&map));
 }
-
-// int	main(int ac, char **av)
-// {
-// 	t_player	player;
-
-// 	// atexit(ll);
-// 	if (ac == 2)
-// 	{
-// 		init_texutres(&player);
-// 		init_all_data(av, &player);
-// 		free_arrays(player.map);
-// 		free_textures(&player);
-// 		printf("------everything is okey------\n");
-// 	}
-// 	else
-// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-// }
