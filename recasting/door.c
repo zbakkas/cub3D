@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   door.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:27:45 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/01 21:12:35 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 12:09:38 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 typedef struct s_arg_door
 {
@@ -21,7 +21,7 @@ typedef struct s_arg_door
 	bool	check;
 	t_int	color;
 	double	tmp;
-}t_arg_door;
+}			t_arg_door;
 
 void	draw_player(t_player *player, int v, int h)
 {
@@ -48,11 +48,13 @@ void	draw_player(t_player *player, int v, int h)
 	}
 }
 
-void	render_door_tow(t_player *player, t_arg_door	arg,
-t_intersection intersection, int i)
+void	render_door_tow(t_player *player, t_arg_door arg, t_inst inst, int i)
 {
-	if (player->map[(int)(intersection.y / PEX)]
-		[(int)(intersection.x / PEX)] == 'd')
+	t_arg_w	args;
+
+	args.check = false;
+	if (player->map[(int)(inst.y / PEX)]
+		[(int)(inst.x / PEX)] == 'd')
 	{
 		while (arg.wall_t < arg.wall_b)
 		{
@@ -61,7 +63,7 @@ t_intersection intersection, int i)
 				player->texture_offset = arg.tmp
 					* player->door_open_tex->height;
 			arg.color = load_colors(player, player->door_open_tex,
-					(t_fpoint){intersection.x, intersection.y});
+					(t_fpoint){inst.x, inst.y}, args);
 			if (arg.color)
 				mlx_put_pixel(player->img, i, arg.wall_t, arg.color);
 			arg.wall_t++;
@@ -69,14 +71,14 @@ t_intersection intersection, int i)
 	}
 }
 
-void	render_door(t_player *player, int i, double ray_angle, int flag, t_intersection intersection)
+void	render_door(t_player *player, t_arg_w args_w, int flag, t_inst inst)
 {
 	t_arg_door	arg;
 
 	arg.check = false;
 	player->texture_offset = 0;
-	intersection.distance *= cos(ray_angle - player->angle);
-	arg.wall_height = (PEX / intersection.distance)
+	inst.distance *= cos(args_w.ray_angle - player->angle);
+	arg.wall_height = (PEX / inst.distance)
 		* (WIDTH / 2) / tan(FOV / 2);
 	arg.wall_b = ((HEIGHT / 2) + (arg.wall_height / 2)) + player->yy;
 	arg.wall_t = ((HEIGHT / 2) - (arg.wall_height / 2)) + player->yy;
@@ -92,7 +94,7 @@ void	render_door(t_player *player, int i, double ray_angle, int flag, t_intersec
 	player->wall_height = arg.wall_height;
 	player->wall_t = arg.wall_t;
 	player->is_vertical = flag;
-	render_door_tow(player, arg, intersection, i);
+	render_door_tow(player, arg, inst, args_w.i);
 }
 
 int	check_door(t_player *player, int distance)

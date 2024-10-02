@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:29:06 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 14:51:20 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:32:31 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,20 @@ t_point	*get_position_door(char **map)
 	return (point);
 }
 
-t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
+t_int	load_colors(t_player *player, mlx_texture_t *texture, 
+			t_fpoint x, t_arg_w args)
 {
 	double	tmp;
 	t_int	pos;
-	t_int	color;
 	t_point	p_tex;
 	uint8_t	*pixel_data;
 
-	color = 0;
 	if (!player->is_vertical)
 		p_tex.x = ((x.x / PEX) - floor(x.x / PEX)) * texture->width;
 	else
 		p_tex.x = ((x.y / PEX) - floor(x.y / PEX)) * texture->width;
+	if (args.check)
+		player->texture_offset = args.tmp * texture->height;
 	tmp = (int)(player->pos_y - player->wall_t) * texture->height;
 	p_tex.y = tmp / player->wall_height + player->texture_offset;
 	pos = ((int)p_tex.y * texture->width * texture->bytes_per_pixel)
@@ -128,7 +129,6 @@ t_int	load_colors(t_player *player, mlx_texture_t *texture, t_fpoint x)
 	pixel_data = &(texture->pixels[pos]);
 	if (!pixel_data)
 		return (0);
-	color = ((pixel_data[0] << 24) | (pixel_data[1] << 16)
-			| (pixel_data[2] << 8) | (pixel_data[3]));
-	return (color);
+	return ((pixel_data[0] << 24) | (pixel_data[1] << 16)
+		| (pixel_data[2] << 8) | (pixel_data[3]));
 }

@@ -3,35 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:10:04 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/01 21:32:05 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 12:03:47 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 typedef struct s_int_
 {
 	double	ya;
 	double	xa;
-}t_int_;
+}			t_int_;
 
-static int	if_(t_player *player, t_intersection *int_)
+static int	if_(t_player *player, t_inst *int_)
 {
 	if ((int)(int_->y / PEX) < player->map_height && 
 	((int)(int_->x / PEX)) < (int)ft_strlen(player->map[(int)(int_->y / PEX)]) 
 	&& (player->map[(int)(int_->y / PEX)][(int)(int_->x / PEX)] == '1'
 	|| (player->map[(int)(int_->y / PEX)][(int)(int_->x / PEX)] == 'D' 
 	|| (player->map[(int)(int_->y / PEX)][(int)(int_->x / PEX)] == 'd'))))
-	{
 		return (1);
-	}
 	return (0);
 }
 
-static int	int__(t_player *player, t_intersection *int_,
+static int	int__(t_player *player, t_inst *int_,
 bool is_door, t_int_ arg)
 {
 	while ((int)(int_->x / PEX) >= 0 && 
@@ -59,12 +57,12 @@ bool is_door, t_int_ arg)
 	return (0);
 }
 
-t_intersection	get_h(t_player *player, double ray_angle, bool is_door)
+t_inst	get_h(t_player *player, double ray_angle, bool is_door)
 {
-	t_intersection	int_;
-	double			first_y;
-	double			first_x;
-	t_int_			arg;
+	t_inst	int_;
+	double	first_y;
+	double	first_x;
+	t_int_	arg;
 
 	int_.distance = 99999999999999;
 	if (ray_angle > 0 && ray_angle < M_PI)
@@ -83,12 +81,12 @@ t_intersection	get_h(t_player *player, double ray_angle, bool is_door)
 	return (int_);
 }
 
-t_intersection	get_v(t_player *player, double ray_angle, bool is_door)
+t_inst	get_v(t_player *player, double ray_angle, bool is_door)
 {
-	t_intersection	int_;
-	double			first_x;
-	double			first_y;
-	t_int_			arg;
+	t_inst	int_;
+	double	first_x;
+	double	first_y;
+	t_int_	arg;
 
 	int_.distance = 99999999999999;
 	if (!(ray_angle > M_PI / 2 && ray_angle < 3 * M_PI / 2))

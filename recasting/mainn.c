@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mainn.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/01 16:07:07 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 12:08:48 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 float	normal_ang(double angle)
 {
@@ -22,41 +22,39 @@ float	normal_ang(double angle)
 
 static void	draw_rays(t_player *player)
 {
-	int				i;
-	t_intersection	distance_h;
-	t_intersection	distance_v;
-	float			ray_angle;
+	t_inst	distance_h;
+	t_inst	distance_v;
+	t_arg_w	args;
 
-	i = 0;
-	ray_angle = (normal_ang(player->angle) - FOV / 2);
-	while (i < NUM_RAYS)
+	args.i = -1;
+	args.ray_angle = (normal_ang(player->angle) - FOV / 2);
+	while (++args.i < NUM_RAYS)
 	{
-		ray_angle = normal_ang(ray_angle);
-		distance_h = get_h(player, ray_angle, 1);
-		distance_v = get_v(player, ray_angle, 1);
+		args.ray_angle = normal_ang(args.ray_angle);
+		distance_h = get_h(player, args.ray_angle, 1);
+		distance_v = get_v(player, args.ray_angle, 1);
 		if (distance_v.distance < distance_h.distance)
-			render_wall(player, i, ray_angle, 1, distance_v);
+			render_wall(player, args, 1, distance_v);
 		else
-			render_wall(player, i, ray_angle, 0, distance_h);
-		distance_h = get_h(player, ray_angle, 0);
-		distance_v = get_v(player, ray_angle, 0);
+			render_wall(player, args, 0, distance_h);
+		distance_h = get_h(player, args.ray_angle, 0);
+		distance_v = get_v(player, args.ray_angle, 0);
 		if (distance_v.distance < distance_h.distance)
-			render_door(player, i, ray_angle, 1, distance_v);
+			render_door(player, args, 1, distance_v);
 		else
-			render_door(player, i, ray_angle, 0, distance_h);
-		i++;
-		ray_angle += (FOV / NUM_RAYS);
+			render_door(player, args, 0, distance_h);
+		args.ray_angle += (FOV / NUM_RAYS);
 	}
 }
 
 static void	jump(t_player *player)
 {
-	if (player->space && player->time_space >= 0  && !player->player_up)
+	if (player->space && player->time_space >= 0 && !player->player_up)
 	{
 		player->yy += 15;
 		player->time_space--;
 	}
-	if (player->space && player->time_space >= 0  && player->player_up)
+	if (player->space && player->time_space >= 0 && player->player_up)
 	{
 		player->yy -= 15;
 		player->time_space--;
@@ -102,16 +100,15 @@ static void	game_loop(void *param)
 int	main(int arc, char **arv)
 {
 	t_player	player;
-	///
-	player.yy =0;
-	player.i_fire =0;
-	player.i_time =0;
-	player.space =false;
+
+	player.yy = 0;
+	player.i_fire = 0;
+	player.i_time = 0;
+	player.space = false;
 	player.time_space = 12;
-	player.player_down =true;
-	player.player_up =false;
-	player.start_mouse =15;
-///
+	player.player_down = true;
+	player.player_up = false;
+	player.start_mouse = 15;
 	if (arc == 2)
 		init_all_data(arv, &player);
 	else

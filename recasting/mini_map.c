@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mini_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:19:05 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/01 21:12:21 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 12:06:19 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 typedef struct s_args_map
 {
@@ -22,9 +22,7 @@ typedef struct s_args_map
 	double	end_y;
 	double	start_x;
 	double	end_x ;
-}t_args_map;
-
-
+}			t_args_map;
 
 static void	cader_map_tow(t_player *player, int c_m_y,
 int max_c_m_y, int max_c_m_x)
