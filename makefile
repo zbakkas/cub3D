@@ -29,15 +29,14 @@ libft:
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(LIB) $(LIBS) $(OBJS) -o $(NAME)
-%.o: %.c $(HAEDER)
-	$(CC) $(CFLAGS) $< -c -o $@
 
 bonus: libft $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS)
 	@$(CC) $(CFLAGS) $(LIB) $(LIBS) $(OBJS_BONUS) -o $(NAME_BONUS)
-%.o: %.c $(HAEDER)
-	$(CC) $(CFLAGS) $< -c -o $@
+
+$(OBJS): $(HAEDER)
+$(OBJS_BONUS): $(HAEDER_BONUS)
 
 clean:
 	@$(RM) $(OBJS) $(OBJS_BONUS)

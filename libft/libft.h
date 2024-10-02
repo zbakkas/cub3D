@@ -6,12 +6,14 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 14:29:42 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 19:14:04 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:29:50 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -86,8 +88,6 @@ char	**new_split(char *str);
 int		hexa_to_int(char *str);
 
 //get_nex_line
-
-# include <fcntl.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
