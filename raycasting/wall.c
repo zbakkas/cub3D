@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   wall.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:29:29 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 12:01:32 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:37:13 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	init_args(t_arg_w *args, t_player *player, t_inst *p)
+static void	init_args(t_arg_w *args, t_player *player, t_inst *p)
 {
 	args->check = false;
 	player->texture_offset = 0;
@@ -33,7 +33,7 @@ void	init_args(t_arg_w *args, t_player *player, t_inst *p)
 	player->wall_t = args->wall_t;
 }
 
-void	render_wall1(t_player *player, t_arg_w args, t_fpoint p)
+static void	render_wall1(t_player *player, t_arg_w args, t_fpoint p)
 {
 	if (player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'D')
 	{
