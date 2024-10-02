@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 18:54:47 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 12:08:48 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:54:53 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,25 +97,17 @@ static void	game_loop(void *param)
 		draw_gun(player, player->gun_texture[0]);
 }
 
-int	main(int arc, char **arv)
+int	main(int ac, char **av)
 {
 	t_player	player;
 
-	player.yy = 0;
-	player.i_fire = 0;
-	player.i_time = 0;
-	player.space = false;
-	player.time_space = 12;
-	player.player_down = true;
-	player.player_up = false;
-	player.start_mouse = 15;
-	if (arc == 2)
-		init_all_data(arv, &player);
-	else
+	if (ac != 2)
 	{
 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
+	init_texutres_data(&player);
+	init_all_data(av, &player);
 	player.mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
 	player.gun_image = mlx_new_image(player.mlx, WIDTH, HEIGHT);
 	player.img = mlx_new_image(player.mlx, WIDTH, HEIGHT);
@@ -123,5 +115,7 @@ int	main(int arc, char **arv)
 	mlx_set_cursor_mode(player.mlx, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(player.mlx, game_loop, &player);
 	mlx_loop(player.mlx);
+	free_arrays(player.map);
+	free_textures(&player);
 	return (0);
 }

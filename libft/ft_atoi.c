@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:11:15 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/09/30 20:36:57 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:57:32 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int	ft_atoi(const char *str)
 	}
 	return (re * signe);
 }
-
-#include <stdio.h>
 
 int	atoi_(char *str)
 {

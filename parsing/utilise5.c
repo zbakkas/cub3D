@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 17:36:02 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/01 10:50:10 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:52:03 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_content_tex(t_player *player)
 	free(player->door_open_tex);
 }
 
-void	init_texutres(t_player *player)
+void	init_texutres_data(t_player *player)
 {
 	player->gun_texture = NULL;
 	player->n_texter = NULL;
@@ -43,6 +43,14 @@ void	init_texutres(t_player *player)
 	player->w_texter = NULL;
 	player->door_tex = NULL;
 	player->door_open_tex = NULL;
+	player->yy = 0;
+	player->i_fire = 0;
+	player->i_time = 0;
+	player->space = false;
+	player->time_space = 12;
+	player->player_down = true;
+	player->player_up = false;
+	player->start_mouse = 15;
 }
 
 bool	init_gun_tex(t_player *player)

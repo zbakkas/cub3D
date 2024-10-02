@@ -1,0 +1,1 @@
+-Ofast -funroll-loops -O3 -march=native -g libft/*.c  parsing/*.c recasting/*.c get_next_line/*.c MLX42/build/libmlx42.a -ldl -lglfw -pthread -lm -o cub3D
