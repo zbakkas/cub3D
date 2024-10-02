@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:33:50 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 19:29:01 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:53:59 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ bool	check_wall(char **map, t_point begin, t_point size);
 void	draw_gun(t_player *player, mlx_texture_t *texture);
 bool	door_is_s(t_point **p, char **map);
 void	free_textures(t_player *player);
-void	init_texutres(t_player *player);
+void	init_texutres_data(t_player *player);
 void	free_content_tex(t_player *player);
 bool	init_gun_tex(t_player *player);
 bool	assign_player(t_player *player, char **map, t_inf inf);
