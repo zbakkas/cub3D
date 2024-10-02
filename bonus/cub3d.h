@@ -6,16 +6,16 @@
 /*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 10:33:50 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 16:09:13 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:11:41 by zbakkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../MLX/include/MLX42/MLX42.h"
-# include "../get_next_line/get_next_line.h"
-# include "../libft/libft.h"
+# include "MLX/include/MLX42/MLX42.h"
+# include "get_next_line/get_next_line.h"
+# include "libft/libft.h"
 # include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
