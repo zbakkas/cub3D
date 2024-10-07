@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:29:29 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 18:31:15 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:16:25 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ static void	init_args(t_arg_w *args, t_player *player, t_inst *p)
 
 static void	render_wall1(t_player *player, t_arg_w args, t_fpoint p)
 {
-	if (player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'D')
+	if (p.y >= 0 && p.x >= 0 && ((int)(p.y / PEX) < player->map_height
+		&& (int)(p.x / PEX) < player->map_weidth)
+		&& player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'D')
 	{
 		args.color = load_colors(player, player->door_tex, p, args);
 		mlx_put_pixel(player->img, args.i, args.wall_t, args.color);

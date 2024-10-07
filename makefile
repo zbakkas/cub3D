@@ -1,10 +1,10 @@
 CC = cc
 RM = rm -f
 NAME = cub3D
-NAME_BONUS = cub3d_bonus
+NAME_BONUS = cub3D_bonus
 HAEDER = ./mandatory/cub3d.h
 HAEDER_BONUS = ./bonus/cub3d_bonus.h
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 SRC = ./mandatory/parsing/cub3d.c ./mandatory/parsing/utilise2.c ./mandatory/parsing/initialize.c ./mandatory/parsing/utilice.c ./mandatory/parsing/check_map.c \
 	./mandatory/parsing/handle_err.c ./mandatory/parsing/utilise4.c ./mandatory/parsing/utilise5.c ./mandatory/parsing/utilice1.c ./mandatory/parsing/utilise3.c\
 	./mandatory/raycasting/mainn.c ./mandatory/raycasting/intersection.c ./mandatory/raycasting/keys.c ./mandatory/raycasting/wall.c\

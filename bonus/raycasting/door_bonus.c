@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:27:45 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 18:30:52 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:20:43 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ void	render_door_tow(t_player *player, t_arg_door arg, t_inst inst, int i)
 	t_arg_w	args;
 
 	args.check = false;
-	if (player->map[(int)(inst.y / PEX)]
-		[(int)(inst.x / PEX)] == 'd')
+	if ((inst.y >= 0 && inst.x >= 0 && (int)(inst.y / PEX) < player->map_height
+		&& (int)(inst.x / PEX) < player->map_weidth)
+		&& player->map[(int)(inst.y / PEX)][(int)(inst.x / PEX)] == 'd')
 	{
 		while (arg.wall_t < arg.wall_b)
 		{
@@ -99,28 +100,29 @@ void	render_door(t_player *player, t_arg_w args_w, int flag, t_inst inst)
 
 int	check_door(t_player *player, int distance)
 {
-	int		i;
-	double	x;
-	double	y;
+	int			i;
+	t_fpoint	p;
 
-	i = 1;
-	while (i <= distance)
+	i = 0;
+	while (++i <= distance)
 	{
-		x = player->x + cos(normal_ang(player->angle)) * i;
-		y = player->y + sin(normal_ang(player->angle)) * i;
-		if (player->map[(int)(y / PEX)][(int)(x / PEX)] == 'D' 
+		p.x = player->x + cos(normal_ang(player->angle)) * i;
+		p.y = player->y + sin(normal_ang(player->angle)) * i;
+		if (p.x < 0 || p.y < 0 || ((int)(p.y / PEX) >= player->map_height
+			|| (int)(p.x / PEX) >= player->map_weidth))
+			return (0);
+		if (player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'D' 
 		&& player->map[(int)(player->y / PEX)][(int)(player->x / PEX)] != 'D')
 		{
-			player->map[(int)(y / PEX)][(int)(x / PEX)] = 'd';
+			player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] = 'd';
 			return (1);
 		}
-		else if (player->map[(int)(y / PEX)][(int)(x / PEX)] == 'd'
+		else if (player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'd'
 		&& player->map[(int)(player->y / PEX)][(int)(player->x / PEX)] != 'd')
 		{
-			player->map[(int)(y / PEX)][(int)(x / PEX)] = 'D';
+			player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] = 'D';
 			return (2);
 		}
-		i++;
 	}
 	return (0);
 }

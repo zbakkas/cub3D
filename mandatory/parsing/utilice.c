@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:45:08 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/01 10:38:12 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/06 15:08:38 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	creat_list(t_map **map, char *line)
 	new_row = (t_map *)malloc(sizeof(t_map));
 	if (!new_row)
 		return ;
-	new_row->row = ft_strtrim(line, "\t \n");
+	new_row->row = ft_strtrim(line, " \n");
 	new_row->next = NULL;
 	if (!*map)
 	{

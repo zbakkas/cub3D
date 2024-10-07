@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 11:52:22 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 18:31:31 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/06 15:09:15 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ bool	map_isclosed(char **map, char c, t_point **point)
 		return (ft_putendl_fd(MAP_ERR, STDERR_FILENO), false);
 	if (!door_is_s(point, map))
 		return (ft_putendl_fd(POS_DOOR, STDERR_FILENO), false);
-	return (check);
+	return (true);
 }
 
 bool	check_wall(char **map, t_point begin, t_point size)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zbakkas <zouhirbakkas@gmail.com>           +#+  +:+       +#+        */
+/*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:29:29 by zbakkas           #+#    #+#             */
-/*   Updated: 2024/10/02 12:37:13 by zbakkas          ###   ########.fr       */
+/*   Updated: 2024/10/06 16:15:43 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@ static void	init_args(t_arg_w *args, t_player *player, t_inst *p)
 
 static void	render_wall1(t_player *player, t_arg_w args, t_fpoint p)
 {
-	if (player->map[(int)(p.y / PEX)][(int)(p.x / PEX)] == 'D')
-	{
-		args.color = load_colors(player, player->door_tex, p, args);
-		mlx_put_pixel(player->img, args.i, args.wall_t, args.color);
-	}
-	else if (player->is_vertical)
+	if (player->is_vertical)
 	{
 		if (args.ray_angle > M_PI / 2.0 && args.ray_angle < 3 * M_PI / 1)
 			args.color = load_colors(player, player->w_texter, p, args);

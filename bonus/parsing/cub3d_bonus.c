@@ -6,7 +6,7 @@
 /*   By: hel-bouk <hel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 10:04:47 by hel-bouk          #+#    #+#             */
-/*   Updated: 2024/10/02 19:54:34 by hel-bouk         ###   ########.fr       */
+/*   Updated: 2024/10/06 15:08:09 by hel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,3 @@ void	init_all_data(char **av, t_player *player)
 	back_to_default(map_2d, inf.position);
 	return (free_inf(&inf), free_map(&map));
 }
-
-// int	main(int ac, char **av)
-// {
-// 	t_player	player;
-
-// 	// atexit(ll);
-// 	if (ac == 2)
-// 	{
-// 		init_texutres(&player);
-// 		init_all_data(av, &player);
-// 		free_arrays(player.map);
-// 		free_textures(&player);
-// 		printf("------everything is okey------\n");
-// 	}
-// 	else
-// 		ft_putendl_fd("Use ./cub3D file.cub", STDERR_FILENO);
-// }
