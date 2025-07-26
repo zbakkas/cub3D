@@ -100,7 +100,7 @@ This project does not include a license by default. Please add one if you intend
 
 ## Credits
 
-Developed by [zbakkas](https://github.com/zbakkas) and contributors. MLX42 by Codam Coding College.
+Developed by [zbakkas](https://github.com/zbakkas) and [houdaifa-boukhari](https://github.com/houdaifa-boukhari). MLX42 by Codam Coding College.
 
 ---
 
